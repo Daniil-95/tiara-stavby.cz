@@ -1,0 +1,6 @@
+{
+  "name": "tiara-stavby",
+  "private": true,
+  "scripts": { "build:css": "sass --style=compressed www/scss/app.scss www/css/app.css && sass --style=compressed www/scss/admin.scss www/css/admin.css" },
+  "devDependencies": { "sass": "^1.80.0" }
+}

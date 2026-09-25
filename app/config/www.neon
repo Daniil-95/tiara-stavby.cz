@@ -1,0 +1,21 @@
+parameters:
+	production: false
+
+application:
+	errorPresenter: Front:Error:default
+	mapping:
+		*: App\\*Module\\presenters\\*Presenter
+
+latte:
+	strictTypes: true
+
+session:
+		httpOnly: true
+		cookieSamesite: Lax
+		secure: auto
+
+http:
+			headers:
+				X-Frame-Options: SAMEORIGIN
+				X-Content-Type-Options: nosniff
+				Referrer-Policy: strict-origin-when-cross-origin

@@ -1,0 +1,137 @@
+CREATE DATABASE IF NOT EXISTS tiara_stavby CHARACTER SET utf8mb4 COLLATE utf8mb4_czech_ci;
+USE tiara_stavby;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(160) NOT NULL,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(32) NOT NULL DEFAULT 'admin',
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS login_logs (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NULL,
+  email VARCHAR(190) NOT NULL,
+  success TINYINT(1) NOT NULL DEFAULT 0,
+  ip_address VARCHAR(45) NOT NULL,
+  user_agent VARCHAR(255) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_login_logs_date (created_at),
+  CONSTRAINT fk_login_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS page_sections (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  section_key VARCHAR(100) NOT NULL,
+  lang CHAR(2) NOT NULL,
+  title VARCHAR(255) NOT NULL DEFAULT '',
+  subtitle VARCHAR(255) NOT NULL DEFAULT '',
+  content MEDIUMTEXT NOT NULL,
+  image_path VARCHAR(500) NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_page_section_lang (section_key, lang)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS services (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  lang CHAR(2) NOT NULL,
+  title VARCHAR(180) NOT NULL,
+  slug VARCHAR(190) NOT NULL,
+  short_description VARCHAR(500) NOT NULL,
+  content MEDIUMTEXT NOT NULL,
+  image_path VARCHAR(500) NULL,
+  icon VARCHAR(80) NOT NULL DEFAULT 'fa-solid fa-house',
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_services_lang_slug (lang, slug),
+  INDEX idx_services_lang_active (lang, active, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS projects (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  lang CHAR(2) NOT NULL,
+  title VARCHAR(220) NOT NULL,
+  slug VARCHAR(220) NOT NULL,
+  category VARCHAR(90) NOT NULL,
+  location VARCHAR(180) NOT NULL,
+  year YEAR NOT NULL,
+  short_description VARCHAR(500) NOT NULL,
+  description MEDIUMTEXT NOT NULL,
+  main_image VARCHAR(500) NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  featured TINYINT(1) NOT NULL DEFAULT 0,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_projects_lang_slug (lang, slug),
+  INDEX idx_projects_public (lang, active, featured, sort_order),
+  CONSTRAINT chk_projects_lang CHECK (lang IN ('cs', 'en'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS project_images (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  project_id INT UNSIGNED NOT NULL,
+  image_path VARCHAR(500) NOT NULL,
+  title VARCHAR(220) NULL,
+  alt_text VARCHAR(300) NOT NULL DEFAULT '',
+  sort_order INT NOT NULL DEFAULT 0,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_project_images_order (project_id, active, sort_order),
+  CONSTRAINT fk_project_images_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS inquiries (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  lang CHAR(2) NOT NULL,
+  name VARCHAR(180) NOT NULL,
+  email VARCHAR(190) NOT NULL,
+  phone VARCHAR(60) NULL,
+  service VARCHAR(120) NULL,
+  message TEXT NOT NULL,
+  consent TINYINT(1) NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('new', 'contacted', 'closed') NOT NULL DEFAULT 'new',
+  ip_address VARCHAR(45) NOT NULL,
+  INDEX idx_inquiries_status_created (status, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS navigation (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  lang CHAR(2) NOT NULL,
+  title VARCHAR(120) NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order INT NOT NULL DEFAULT 0,
+  INDEX idx_navigation_order (lang, active, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS settings (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  setting_key VARCHAR(120) NOT NULL UNIQUE,
+  setting_value TEXT NOT NULL,
+  setting_group VARCHAR(60) NOT NULL DEFAULT 'general',
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
+
+CREATE TABLE IF NOT EXISTS seo_metadata (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  page_path VARCHAR(255) NOT NULL,
+  lang CHAR(2) NOT NULL,
+  meta_title VARCHAR(255) NOT NULL DEFAULT '',
+  meta_description VARCHAR(320) NOT NULL DEFAULT '',
+  og_title VARCHAR(255) NOT NULL DEFAULT '',
+  og_description VARCHAR(320) NOT NULL DEFAULT '',
+  og_image VARCHAR(500) NULL,
+  canonical_url VARCHAR(500) NULL,
+  robots VARCHAR(80) NOT NULL DEFAULT 'index,follow',
+  UNIQUE KEY uq_seo_path_lang (page_path, lang)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;

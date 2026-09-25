@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="cs">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>{ifset $pageTitle}{$pageTitle} · {/ifset}TIARA CMS</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"><link rel="stylesheet" href="/css/admin.css"></head>
+<body class="admin-shell">
+	{ifset $adminUser}
+	<div class="admin-frame">
+		<aside class="admin-sidebar" id="admin-sidebar"><a class="admin-brand" href="/admin"><img src="/images/tiara-logo-light.svg" width="180" height="54" alt="TIARA s.r.o."><span>CONTENT STUDIO</span></a>
+			<nav aria-label="Admin navigation"><span class="admin-nav__label">PŘEHLED</span><a href="/admin" class="{if $presenter->name === 'Admin:Dashboard'}is-active{/if}"><i class="fa-solid fa-grid-2"></i> Dashboard</a><span class="admin-nav__label">OBSAH</span><a href="/admin/page"><i class="fa-regular fa-file-lines"></i> Stránky</a><a href="/admin/service"><i class="fa-solid fa-compass-drafting"></i> Služby</a><a href="/admin/project"><i class="fa-regular fa-building"></i> Realizace</a><a href="/admin/gallery"><i class="fa-regular fa-images"></i> Galerie</a><a href="/admin/navigation"><i class="fa-solid fa-bars"></i> Navigace</a><span class="admin-nav__label">KOMUNIKACE</span><a href="/admin/inquiry"><i class="fa-regular fa-message"></i> Poptávky</a><span class="admin-nav__label">SYSTÉM</span><a href="/admin/setting"><i class="fa-solid fa-sliders"></i> Nastavení</a><a href="/admin/seo"><i class="fa-solid fa-magnifying-glass"></i> SEO</a></nav>
+			<div class="admin-sidebar__bottom"><a href="/cs/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Zobrazit web</a><a href="/admin/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Odhlásit se</a></div>
+		</aside>
+		<div class="admin-main"><header class="admin-topbar"><button class="admin-menu-toggle" type="button" aria-label="Menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button><div><span class="admin-topbar__eyebrow">TIARA s.r.o.</span><strong>Správa obsahu</strong></div><div class="admin-topbar__right"><span class="admin-user"><i class="fa-regular fa-circle-user"></i> {$adminUser}</span><a href="/admin/logout" class="admin-icon-button" aria-label="Odhlásit"><i class="fa-solid fa-arrow-right-from-bracket"></i></a></div></header>
+			{foreach $flashes as $flash}<div class="admin-flash admin-flash--{$flash->type}">{$flash->message}</div>{/foreach}
+			<main class="admin-content">{include content}</main><footer class="admin-footer">TIARA s.r.o. <span>·</span> Content Studio <span>·</span> 2026</footer></div>
+	</div>
+	{else}{include content}{/ifset}
+	<script src="/js/admin.js" defer></script>
+</body>
+</html>

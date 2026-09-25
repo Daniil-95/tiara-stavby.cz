@@ -1,0 +1,8 @@
+# Local-only values. Override these for your MySQL installation.
+parameters:
+	dbHost: 127.0.0.1
+	dbName: tiara_stavby
+	dbUser: root
+	dbPassword: ''
+	adminEmail: info@tiara-stavby.cz
+	baseUrl: http://localhost
