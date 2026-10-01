@@ -22,7 +22,7 @@ final class HomePresenter extends BasePresenter
 		}
 		$this->template->stats = $stats;
 		$this->template->cta = $this->pages->section('cta', 'cs');
-		$this->template->services = $this->services->all('cs');
+		$this->template->services = array_slice($this->services->all('cs'), 0, 3);
 		$this->template->projects = $this->projects->featured('cs', 3);
 		$this->template->pageTitle = 'Stavíme vaši lepší budoucnost';
 	}

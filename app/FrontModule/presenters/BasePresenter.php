@@ -159,7 +159,7 @@ abstract class BasePresenter extends Presenter
 	{
 		return [
 			'home' => 'Domů', 'about' => 'O nás', 'services' => 'Služby', 'projects' => 'Realizace',
-			'quote' => 'Nezávazná poptávka', 'more' => 'Zjistit více', 'allProjects' => 'Všechny realizace', 'allServices' => 'Naše služby', 'contactUs' => 'Kontaktujte nás', 'phone' => 'Telefon', 'email' => 'E-mail', 'address' => 'Adresa', 'hours' => 'Pracovní doba', 'send' => 'Odeslat poptávku', 'location' => 'Lokalita', 'year' => 'Rok', 'category' => 'Kategorie', 'back' => 'Zpět na realizace', 'step' => 'Pojďme probrat váš projekt',
+			'quote' => 'Nezávazná poptávka', 'more' => 'Zjistit více', 'allProjects' => 'Všechny realizace', 'allServices' => 'Všechny služby', 'contactUs' => 'Kontaktujte nás', 'phone' => 'Telefon', 'email' => 'E-mail', 'address' => 'Adresa', 'hours' => 'Pracovní doba', 'send' => 'Odeslat poptávku', 'location' => 'Lokalita', 'year' => 'Rok', 'category' => 'Kategorie', 'back' => 'Zpět na realizace', 'step' => 'Pojďme probrat váš projekt',
 		];
 	}
 }

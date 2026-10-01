@@ -93,6 +93,8 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 48px; margin-bottom: 58px; }
 .section-heading h2 { margin: 0; font-size: clamp(40px, 5vw, 66px); }
 .section-heading > p { max-width: 350px; margin-bottom: 6px; color: $steel; font-size: 14px; }
+.services-section__aside { max-width: 350px; margin-bottom: 6px; color: $steel; font-size: 14px; }
+.services-section__aside p { margin: 0 0 14px; }
 .services-section { padding-top: 116px; background: $paper; }
 .service-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
 .service-card { min-width: 0; }
@@ -409,6 +411,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.section-heading { align-items: start; gap: 24px; margin-bottom: 43px; }
 	.section-heading h2 { font-size: clamp(39px, 6.3vw, 55px); }
 	.section-heading > p { max-width: 275px; font-size: 12px; }
+	.services-section__aside { max-width: 275px; font-size: 12px; }
 	.service-grid { gap: 17px; }
 	.service-card__body { padding-top: 19px; }
 	.service-card h3 { font-size: 19px; }
@@ -480,6 +483,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.section-heading { display: block; margin-bottom: 35px; }
 	.section-heading h2 { font-size: 43px; }
 	.section-heading > p { margin-top: 16px; }
+	.services-section__aside { margin-top: 16px; }
 	.services-section { padding-top: 76px; }
 	.service-grid { grid-template-columns: 1fr; gap: 34px; }
 	.service-card__image { aspect-ratio: 1.2; }
