@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9dc223e136aa99e66a3150bd72dafc4a",
+    "content-hash": "e0c4deb6bd09e4ed82aa22fdfb9dac3b",
     "packages": [
         {
             "name": "latte/latte",
@@ -668,34 +668,34 @@
         },
         {
             "name": "nette/http",
-            "version": "v3.4.1",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/http.git",
-                "reference": "ceebf08f42a3de756a0cfe74d9b88d51155774a5"
+                "reference": "d92cb97fea369d10b46677223cc2bfb5adc1a2f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/http/zipball/ceebf08f42a3de756a0cfe74d9b88d51155774a5",
-                "reference": "ceebf08f42a3de756a0cfe74d9b88d51155774a5",
+                "url": "https://api.github.com/repos/nette/http/zipball/d92cb97fea369d10b46677223cc2bfb5adc1a2f2",
+                "reference": "d92cb97fea369d10b46677223cc2bfb5adc1a2f2",
                 "shasum": ""
             },
             "require": {
-                "nette/utils": "^4.1",
-                "php": "8.3 - 8.5"
+                "nette/utils": "^4.0.4",
+                "php": "8.1 - 8.5"
             },
             "conflict": {
                 "nette/di": "<3.0.3",
                 "nette/schema": "<1.2"
             },
             "require-dev": {
-                "nette/di": "^3.2",
+                "nette/di": "^3.0",
                 "nette/phpstan-rules": "^1.0",
-                "nette/security": "^3.2",
+                "nette/security": "^3.0",
                 "nette/tester": "^2.6",
                 "phpstan/extension-installer": "^1.4@stable",
-                "phpstan/phpstan": "^2.2@stable",
-                "tracy/tracy": "^2.12"
+                "phpstan/phpstan": "^2.1@stable",
+                "tracy/tracy": "^2.8"
             },
             "suggest": {
                 "ext-fileinfo": "to detect MIME type of uploaded files by Nette\\Http\\FileUpload",
@@ -706,7 +706,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -748,9 +748,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/http/issues",
-                "source": "https://github.com/nette/http/tree/v3.4.1"
+                "source": "https://github.com/nette/http/tree/v3.3.4"
             },
-            "time": "2026-08-27T03:04:37+00:00"
+            "time": "2026-05-26T16:57:36+00:00"
         },
         {
             "name": "nette/neon",

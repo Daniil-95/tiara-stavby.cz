@@ -19,7 +19,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 	<link rel="stylesheet" href="/css/app.css">
-	<link rel="preload" as="image" href="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85" imagesrcset="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80 1200w, https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85 2000w">
+	{if $currentPath === '/'}<link rel="preload" as="image" href="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85" imagesrcset="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80 1200w, https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85 2000w">{/if}
 	<script type="application/ld+json">{$jsonLd|noescape}</script>
 </head>
 <body>
@@ -27,7 +27,7 @@
 	<div class="topline"><div class="container topline__inner"><span>Stavíme promyšleně. S hodnotou na dlouhá léta.</span><div><a href="tel:{$company['phone'] ?? '+420000000000'}"><i class="fa-solid fa-phone"></i> {$company['phone'] ?? '+420 000 000 000'}</a></div></div></div>
 	<header class="site-header" data-header>
 		<div class="container header__inner">
-			<a class="brand" href="/" aria-label="TIARA s.r.o. — home"><img src="/images/tiara-logo.svg" width="206" height="60" alt="TIARA s.r.o. — VEŠKERÉ STAVEBNÍ PRÁCE"></a>
+			<a class="brand" href="/" aria-label="TIARA s.r.o. — domů"><img src="/images/tiara-logo.svg" width="206" height="60" alt="TIARA s.r.o. — VEŠKERÉ STAVEBNÍ PRÁCE"></a>
 			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span><span></span><span class="sr-only">Menu</span></button>
 			<nav class="main-nav" id="primary-navigation" aria-label="Hlavní navigace">
 				{foreach $navigationItems as $item}{var $isActive = $activeNavigation[$item['id']] ?? false}<a href="{$item['url']}" class="nav-link {if $isActive}is-active{/if}" {if $isActive}aria-current="page"{/if}>{$item['title']}</a>{/foreach}
