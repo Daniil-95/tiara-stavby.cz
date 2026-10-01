@@ -1,4 +1,15 @@
 (() => {
+  document.querySelectorAll('[data-preview-target]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const file = input.files?.[0];
+      const preview = document.getElementById(input.dataset.previewTarget);
+      if (!file || !preview) return;
+      if (preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
+      preview.dataset.objectUrl = URL.createObjectURL(file);
+      preview.src = preview.dataset.objectUrl;
+    });
+  });
+
   const button = document.querySelector('.admin-menu-toggle');
   const sidebar = document.querySelector('.admin-sidebar');
   if (!button || !sidebar) return;

@@ -14,6 +14,7 @@ final class RouterFactory
 		$router = new RouteList;
 		$router->addRoute('admin', 'Admin:Dashboard:default');
 		$router->addRoute('admin/login', 'Admin:Login:default');
+		$router->addRoute('admin/editor/<page>', 'Admin:SiteEditor:default');
 		$router->addRoute('admin/<section>[/<operation>[/<id \\d+>]]', 'Admin:Content:default');
 		$router->addRoute('sitemap.xml', 'Front:Sitemap:default');
 		$router->addRoute('', 'Front:Home:default');

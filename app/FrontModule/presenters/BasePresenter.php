@@ -74,6 +74,8 @@ abstract class BasePresenter extends Presenter
 			'url' => 'https://tiara-stavby.cz',
 		], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 		$meta = $this->seo->forPath($path, 'cs');
+		$keywordsKey = 'seo_keywords_' . (trim(str_replace('/', '_', $path), '_') ?: 'home');
+		$this->template->metaKeywords = $this->settings->get($keywordsKey);
 		if ($meta) {
 			$this->template->metaTitle = $meta['meta_title'];
 			$this->template->metaDescription = $meta['meta_description'];

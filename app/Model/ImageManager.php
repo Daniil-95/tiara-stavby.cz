@@ -18,6 +18,16 @@ final class ImageManager
 
 	public function saveProjectImage(FileUpload $upload): string
 	{
+		return $this->saveImage($upload, 'projects');
+	}
+
+	public function saveContentImage(FileUpload $upload): string
+	{
+		return $this->saveImage($upload, 'site');
+	}
+
+	private function saveImage(FileUpload $upload, string $collection): string
+	{
 		if (!$upload->isOk() || $upload->getSize() > 8 * 1024 * 1024) throw new \RuntimeException('Soubor není platný nebo překračuje 8 MB.');
 		$info = @getimagesize($upload->getTemporaryFile());
 		$mime = $upload->getContentType();
@@ -25,20 +35,21 @@ final class ImageManager
 		if (!$info || !isset($extensions[$mime]) || $info['mime'] !== $mime) throw new \RuntimeException('Povolené jsou pouze obrázky JPG, PNG, GIF a WebP.');
 		if ((int) $info[0] > 14000 || (int) $info[1] > 14000 || (int) $info[0] * (int) $info[1] > 80_000_000) throw new \RuntimeException('Rozměry obrázku jsou příliš velké.');
 		$name = Random::generate(20) . '.' . $extensions[$mime];
-		$directory = $this->root . '/projects';
+		$directory = $this->root . '/' . $collection;
 		if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) throw new \RuntimeException('Upload directory is not writable.');
 		$target = $directory . '/' . $name;
 		$upload->move($target);
 		$this->createDerivatives($target, $mime, (int) $info[0], (int) $info[1]);
-		return '/uploads/projects/' . $name;
+		return '/uploads/' . $collection . '/' . $name;
 	}
 
 	public function safeUrl(?string $path, string $fallback = '/images/project-fallback.svg'): string
 	{
 		if (!$path) return $fallback;
-		if (str_starts_with($path, '/uploads/projects/')) {
+		if (str_starts_with($path, '/uploads/projects/') || str_starts_with($path, '/uploads/site/')) {
+			$collection = str_starts_with($path, '/uploads/site/') ? 'site' : 'projects';
 			$name = basename($path);
-			if ($name !== $path && preg_match('/^[a-zA-Z0-9_-]+\.(?:jpg|png|gif|webp)$/i', $name) && is_file($this->root . '/projects/' . $name)) return '/uploads/projects/' . $name;
+			if (preg_match('/^[a-zA-Z0-9_-]+\.(?:jpg|png|gif|webp)$/i', $name) && is_file($this->root . '/' . $collection . '/' . $name)) return '/uploads/' . $collection . '/' . $name;
 			return $fallback;
 		}
 		if (str_starts_with($path, '/images/')) {
@@ -65,14 +76,15 @@ final class ImageManager
 			}
 			return implode(', ', $sources);
 		}
-		if (str_starts_with($url, '/uploads/projects/')) {
+		if (str_starts_with($url, '/uploads/projects/') || str_starts_with($url, '/uploads/site/')) {
+			$collection = str_starts_with($url, '/uploads/site/') ? 'site' : 'projects';
 			$name = basename($url);
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
 			$base = substr($name, 0, -strlen($extension) - 1);
 			$sources = [];
 			foreach ([480, 1200] as $width) {
 				$variant = $base . '-' . $width . '.' . $extension;
-				$src = is_file($this->root . '/projects/' . $variant) ? '/uploads/projects/' . $variant : $url;
+				$src = is_file($this->root . '/' . $collection . '/' . $variant) ? '/uploads/' . $collection . '/' . $variant : $url;
 				$sources[] = $src . ' ' . $width . 'w';
 			}
 			return implode(', ', $sources);
@@ -82,13 +94,24 @@ final class ImageManager
 
 	public function deleteProjectImage(?string $path): void
 	{
-		if (!$path || !str_starts_with($path, '/uploads/projects/')) return;
+		$this->deleteImage($path, 'projects');
+	}
+
+	public function deleteContentImage(?string $path): void
+	{
+		$this->deleteImage($path, 'site');
+	}
+
+	private function deleteImage(?string $path, string $collection): void
+	{
+		$prefix = '/uploads/' . $collection . '/';
+		if (!$path || !str_starts_with($path, $prefix)) return;
 		$name = basename($path);
 		if (!preg_match('/^[a-zA-Z0-9_-]+\.(?:jpg|png|gif|webp)$/i', $name)) return;
 		$extension = pathinfo($name, PATHINFO_EXTENSION);
 		$base = substr($name, 0, -strlen($extension) - 1);
 		foreach ([$base . '.' . $extension, $base . '-480.' . $extension, $base . '-1200.' . $extension] as $file) {
-			$target = $this->root . '/projects/' . $file;
+			$target = $this->root . '/' . $collection . '/' . $file;
 			if (is_file($target)) @unlink($target);
 		}
 	}
