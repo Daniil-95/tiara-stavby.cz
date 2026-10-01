@@ -51,6 +51,43 @@
     revealItems.forEach((item) => observer.observe(item));
   } else revealItems.forEach((item) => item.classList.add('is-visible'));
 
+  document.querySelectorAll('[data-project-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector('[data-project-track]');
+    const controls = carousel.parentElement?.querySelector('[data-carousel-controls]');
+    const previous = controls?.querySelector('[data-carousel-prev]');
+    const next = controls?.querySelector('[data-carousel-next]');
+    if (!track || !controls || !previous || !next) return;
+
+    const step = () => {
+      const card = track.querySelector('.project-card');
+      if (!card) return 0;
+      return card.getBoundingClientRect().width + Number.parseFloat(window.getComputedStyle(track).columnGap || '0');
+    };
+    const updateControls = () => {
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      controls.hidden = maxScroll <= 1;
+      previous.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= maxScroll - 4;
+    };
+    const scroll = (direction) => track.scrollBy({
+      left: step() * direction,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    });
+
+    let scrollFrame = 0;
+    previous.addEventListener('click', () => scroll(-1));
+    next.addEventListener('click', () => scroll(1));
+    track.addEventListener('scroll', () => {
+      if (scrollFrame) return;
+      scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = 0;
+        updateControls();
+      });
+    }, { passive: true });
+    window.addEventListener('resize', updateControls, { passive: true });
+    updateControls();
+  });
+
   document.querySelectorAll('[data-lightbox]').forEach((anchor) => anchor.addEventListener('click', (event) => {
     event.preventDefault();
     const dialog = document.createElement('dialog');
