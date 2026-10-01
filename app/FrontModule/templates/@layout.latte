@@ -32,7 +32,7 @@
 			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span><span></span><span class="sr-only">Menu</span></button>
 			<nav class="main-nav" id="primary-navigation" aria-label="Hlavní navigace">
 				{foreach $navigationItems as $item}{var $isActive = $activeNavigation[$item['id']] ?? false}<a href="{$item['url']}" class="nav-link {if $isActive}is-active{/if}" {if $isActive}aria-current="page"{/if}>{$item['title']}</a>{/foreach}
-				<a href="/admin" class="nav-link nav-link--admin"><i class="fa-solid fa-right-to-bracket"></i> Administrace</a>
+				<a href="/admin" class="nav-link nav-link--admin" aria-label="Administrace" title="Administrace"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i></a>
 			</nav>
 			<a class="button button--small button--navy header__cta" href="{$company['header_cta_url'] ?? '/kontakt'}" aria-label="{$company['header_cta_label'] ?? 'Nezávazná poptávka'}"><span>{$company['header_cta_label'] ?? 'Nezávazná poptávka'}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
 		</div>
