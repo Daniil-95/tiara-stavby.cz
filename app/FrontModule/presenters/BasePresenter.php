@@ -17,7 +17,6 @@ use Nette\Utils\Random;
 
 abstract class BasePresenter extends Presenter
 {
-	public string $lang = 'cs';
 	protected SettingRepository $settings;
 	protected NavigationRepository $navigation;
 	protected PageRepository $pages;
@@ -48,16 +47,13 @@ abstract class BasePresenter extends Presenter
 	{
 		parent::startup();
 		$this->getSession()->start();
-		$lang = (string) ($this->getParameter('lang') ?? 'cs');
-		$this->lang = in_array($lang, ['cs', 'en'], true) ? $lang : 'cs';
 	}
 
 	protected function beforeRender(): void
 	{
 		parent::beforeRender();
-		$path = preg_replace('#^/(cs|en)(?=/|$)#', '', $this->getHttpRequest()->getUrl()->getPath()) ?: '/';
-		$this->template->lang = $this->lang;
-		$this->template->navigationItems = $this->navigation->all($this->lang);
+		$path = $this->getHttpRequest()->getUrl()->getPath() ?: '/';
+		$this->template->navigationItems = $this->navigation->all('cs');
 		$this->template->company = $this->settings->all();
 		$this->template->labels = $this->labels();
 		$this->template->imageManager = $this->imageManager;
@@ -67,7 +63,7 @@ abstract class BasePresenter extends Presenter
 		foreach ($this->template->navigationItems as $item) {
 			$target = rtrim((string) $item['url'], '/') ?: '/';
 			$current = rtrim($currentPath, '/') ?: '/';
-			$activeNavigation[$item['id']] = $target === $current || (!in_array($target, ['/cs', '/en'], true) && str_starts_with($current, $target . '/'));
+			$activeNavigation[$item['id']] = $target === $current || ($target !== '/' && str_starts_with($current, $target . '/'));
 		}
 		$this->template->activeNavigation = $activeNavigation;
 		$this->template->jsonLd = json_encode([
@@ -77,7 +73,7 @@ abstract class BasePresenter extends Presenter
 			'address' => ['@type' => 'PostalAddress', 'addressLocality' => $this->settings->get('address'), 'addressCountry' => 'CZ'],
 			'url' => 'https://tiara-stavby.cz',
 		], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-		$meta = $this->seo->forPath($path, $this->lang);
+		$meta = $this->seo->forPath($path, 'cs');
 		if ($meta) {
 			$this->template->metaTitle = $meta['meta_title'];
 			$this->template->metaDescription = $meta['meta_description'];
@@ -93,40 +89,39 @@ abstract class BasePresenter extends Presenter
 	{
 		$form = new Form;
 		$form->setHtmlAttribute('class', 'contact-form');
-		$english = $this->lang === 'en';
-		$required = $english ? 'Please fill in this field.' : 'Vyplňte prosím toto pole.';
+		$required = 'Vyplňte prosím toto pole.';
 		$services = [];
-		foreach ($this->services->all($this->lang) as $service) $services[$service['title']] = $service['title'];
-		$form->addText('name', $english ? 'Your name' : 'Vaše jméno')->setRequired($required)->addRule($form::MaxLength, null, 180);
-		$form->addEmail('email', $english ? 'Email address' : 'E-mail')->setRequired($required)->addRule($form::MaxLength, null, 190);
-		$form->addText('phone', $english ? 'Phone (optional)' : 'Telefon (nepovinné)')->addRule($form::MaxLength, null, 60);
-		$form->addSelect('service', $english ? 'Service' : 'Typ služby', $services)->setPrompt($english ? 'Choose a service' : 'Vyberte službu');
-		$form->addTextArea('message', $english ? 'Tell us about your project' : 'Napište nám o svém projektu')->setRequired($required)->addRule($form::MinLength, $english ? 'Message is too short.' : 'Zpráva je příliš krátká.', 10)->addRule($form::MaxLength, null, 10000);
-		$form->addCheckbox('consent', $english ? 'I agree to the processing of my personal data.' : 'Souhlasím se zpracováním osobních údajů.')->setRequired($english ? 'Please provide your consent.' : 'Pro odeslání je nutný souhlas.');
+		foreach ($this->services->all('cs') as $service) $services[$service['title']] = $service['title'];
+		$form->addText('name', 'Vaše jméno')->setRequired($required)->addRule($form::MaxLength, null, 180);
+		$form->addEmail('email', 'E-mail')->setRequired($required)->addRule($form::MaxLength, null, 190);
+		$form->addText('phone', 'Telefon (nepovinné)')->addRule($form::MaxLength, null, 60);
+		$form->addSelect('service', 'Typ služby', $services)->setPrompt('Vyberte službu');
+		$form->addTextArea('message', 'Napište nám o svém projektu')->setRequired($required)->addRule($form::MinLength, 'Zpráva je příliš krátká.', 10)->addRule($form::MaxLength, null, 10000);
+		$form->addCheckbox('consent', 'Souhlasím se zpracováním osobních údajů.')->setRequired('Pro odeslání je nutný souhlas.');
 		$form->addText('website')->setHtmlAttribute('class', 'hp-field')->setHtmlAttribute('tabindex', '-1')->setHtmlAttribute('autocomplete', 'off');
 		$submission = $this->getSession()->getSection('inquiry');
 		if (!$submission->get('submissionToken')) $submission->set('submissionToken', Random::generate(40));
 		$form->addHidden('submissionToken')->setDefaultValue((string) $submission->get('submissionToken'));
-		$form->addProtection($english ? 'The form has expired. Please try again.' : 'Formulář vypršel. Zkuste to prosím znovu.');
-		$form->addSubmit('send', $english ? 'Send inquiry' : 'Odeslat poptávku')->setHtmlAttribute('class', 'button button--gold');
-		$form->onSuccess[] = function (Form $form, \stdClass $values) use ($english): void {
+		$form->addProtection('Formulář vypršel. Zkuste to prosím znovu.');
+		$form->addSubmit('send', 'Odeslat poptávku')->setHtmlAttribute('class', 'button button--gold');
+		$form->onSuccess[] = function (Form $form, \stdClass $values): void {
 			if (trim((string) $values->website) !== '') {
-				$this->redirect('Pages:thanks', ['lang' => $this->lang]);
+				$this->redirect('Pages:thanks');
 			}
 			$submission = $this->getSession()->getSection('inquiry');
 			$expectedToken = $submission->get('submissionToken');
 			if (!is_string($expectedToken) || !hash_equals($expectedToken, (string) $values->submissionToken)) {
-				$this->flashMessage($english ? 'Your inquiry has already been received.' : 'Vaši poptávku už jsme přijali.', 'success');
-				$this->redirect('Pages:thanks', ['lang' => $this->lang]);
+				$this->flashMessage('Vaši poptávku už jsme přijali.', 'success');
+				$this->redirect('Pages:thanks');
 			}
 			$ip = $this->getHttpRequest()->getRemoteAddress() ?: 'unknown';
 			try {
 				if ($this->inquiries->countRecent($ip) >= 5) {
-					$form->addError($english ? 'Please try again later.' : 'Zkuste to prosím později.');
+				$form->addError('Zkuste to prosím později.');
 					return;
 				}
 				$this->inquiries->create([
-					'lang' => $this->lang,
+					'lang' => 'cs',
 					'name' => trim($values->name),
 					'email' => trim($values->email),
 					'phone' => trim($values->phone) ?: null,
@@ -137,13 +132,13 @@ abstract class BasePresenter extends Presenter
 				]);
 				$submission->set('submissionToken', Random::generate(40));
 				$this->notifyAdmin($values);
-				$this->flashMessage($english ? 'Thank you. We will be in touch shortly.' : 'Děkujeme. Brzy se vám ozveme.', 'success');
-				$this->redirect('Pages:thanks', ['lang' => $this->lang]);
+				$this->flashMessage('Děkujeme. Brzy se vám ozveme.', 'success');
+				$this->redirect('Pages:thanks');
 			} catch (\Nette\Application\AbortException $e) {
 				throw $e;
 			} catch (\Throwable $e) {
 				error_log('Inquiry submission failed: ' . $e->getMessage());
-				$form->addError($english ? 'We could not send your inquiry. Please try again.' : 'Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');
+				$form->addError('Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');
 			}
 		};
 		return $form;
@@ -160,10 +155,7 @@ abstract class BasePresenter extends Presenter
 
 	private function labels(): array
 	{
-		return $this->lang === 'en' ? [
-			'home' => 'Home', 'about' => 'About us', 'services' => 'Services', 'projects' => 'Projects', 'references' => 'References', 'contact' => 'Contact',
-			'quote' => 'Request a quote', 'more' => 'Discover more', 'allProjects' => 'All projects', 'allServices' => 'Our services', 'contactUs' => 'Contact us', 'phone' => 'Phone', 'email' => 'Email', 'address' => 'Address', 'hours' => 'Opening hours', 'send' => 'Send inquiry', 'location' => 'Location', 'year' => 'Year', 'category' => 'Category', 'back' => 'Back to projects', 'step' => 'Let’s talk about your project',
-		] : [
+		return [
 			'home' => 'Domů', 'about' => 'O nás', 'services' => 'Služby', 'projects' => 'Realizace', 'references' => 'Reference', 'contact' => 'Kontakt',
 			'quote' => 'Nezávazná poptávka', 'more' => 'Zjistit více', 'allProjects' => 'Všechny realizace', 'allServices' => 'Naše služby', 'contactUs' => 'Kontaktujte nás', 'phone' => 'Telefon', 'email' => 'E-mail', 'address' => 'Adresa', 'hours' => 'Pracovní doba', 'send' => 'Odeslat poptávku', 'location' => 'Lokalita', 'year' => 'Rok', 'category' => 'Kategorie', 'back' => 'Zpět na realizace', 'step' => 'Pojďme probrat váš projekt',
 		];

@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE KEY uq_projects_lang_slug (lang, slug),
   INDEX idx_projects_public (lang, active, featured, sort_order),
-  CONSTRAINT chk_projects_lang CHECK (lang IN ('cs', 'en'))
+  CONSTRAINT chk_projects_lang CHECK (lang = 'cs')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
 
 CREATE TABLE IF NOT EXISTS project_images (
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS project_images (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_project_images_order (project_id, active, sort_order),
   UNIQUE KEY uq_project_image_path (project_id, image_path),
-  CONSTRAINT chk_project_images_lang CHECK (lang IN ('cs', 'en')),
+  CONSTRAINT chk_project_images_lang CHECK (lang = 'cs'),
   CONSTRAINT fk_project_images_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
 

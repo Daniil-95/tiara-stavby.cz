@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="{$lang}">
+<html lang="cs">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#f6f5f2">
-	<meta name="description" content="{ifset $metaDescription}{$metaDescription}{else}{if $lang === 'en'}Construction, renovation and modernisation by TIARA s.r.o.{else}Výstavba, rekonstrukce a modernizace od TIARA s.r.o.{/if}{/ifset}">
+	<meta name="description" content="{ifset $metaDescription}{$metaDescription}{else}Výstavba, rekonstrukce a modernizace od TIARA s.r.o.{/ifset}">
 	<meta name="robots" content="{ifset $robots}{$robots}{else}index,follow{/ifset}">
-	{ifset $metaTitle}<title>{$metaTitle}</title>{else}<title>{ifset $pageTitle}{$pageTitle} · {/ifset}TIARA s.r.o. — {if $lang === 'en'}Construction{else}Stavební práce{/if}</title>{/ifset}
+	{ifset $metaTitle}<title>{$metaTitle}</title>{else}<title>{ifset $pageTitle}{$pageTitle} · {/ifset}TIARA s.r.o. — Stavební práce</title>{/ifset}
 	<meta property="og:type" content="website">
 	<meta property="og:site_name" content="TIARA s.r.o.">
 	<meta property="og:title" content="{ifset $ogTitle}{$ogTitle}{else}TIARA s.r.o.{/ifset}">
@@ -23,28 +23,29 @@
 	<script type="application/ld+json">{$jsonLd|noescape}</script>
 </head>
 <body>
-	<a class="skip-link" href="#main">{if $lang === 'en'}Skip to content{else}Přejít na obsah{/if}</a>
-	<div class="topline"><div class="container topline__inner"><span>{if $lang === 'en'}Thoughtful building. Lasting value.{else}Stavíme promyšleně. S hodnotou na dlouhá léta.{/if}</span><div><a href="tel:{$company['phone'] ?? '+420000000000'}"><i class="fa-solid fa-phone"></i> {$company['phone'] ?? '+420 000 000 000'}</a><span class="topline__separator"></span><a class="language-switch" href="{if $lang === 'en'}/cs/{else}/en/{/if}" hreflang="{if $lang === 'en'}cs{else}en{/if}">{if $lang === 'en'}CZ{else}EN{/if}</a></div></div></div>
+	<a class="skip-link" href="#main">Přejít na obsah</a>
+	<div class="topline"><div class="container topline__inner"><span>Stavíme promyšleně. S hodnotou na dlouhá léta.</span><div><a href="tel:{$company['phone'] ?? '+420000000000'}"><i class="fa-solid fa-phone"></i> {$company['phone'] ?? '+420 000 000 000'}</a></div></div></div>
 	<header class="site-header" data-header>
 		<div class="container header__inner">
-			<a class="brand" href="{if $lang === 'en'}/en/{else}/cs/{/if}" aria-label="TIARA s.r.o. — home"><img src="/images/tiara-logo.svg" width="206" height="60" alt="TIARA s.r.o. — VEŠKERÉ STAVEBNÍ PRÁCE"></a>
+			<a class="brand" href="/" aria-label="TIARA s.r.o. — home"><img src="/images/tiara-logo.svg" width="206" height="60" alt="TIARA s.r.o. — VEŠKERÉ STAVEBNÍ PRÁCE"></a>
 			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span><span></span><span class="sr-only">Menu</span></button>
-			<nav class="main-nav" id="primary-navigation" aria-label="{if $lang === 'en'}Main navigation{else}Hlavní navigace{/if}">
+			<nav class="main-nav" id="primary-navigation" aria-label="Hlavní navigace">
 				{foreach $navigationItems as $item}{var $isActive = $activeNavigation[$item['id']] ?? false}<a href="{$item['url']}" class="nav-link {if $isActive}is-active{/if}" {if $isActive}aria-current="page"{/if}>{$item['title']}</a>{/foreach}
+				<a href="/admin" class="nav-link nav-link--admin"><i class="fa-solid fa-right-to-bracket"></i> Administrace</a>
 			</nav>
-			<a class="button button--small button--navy header__cta" href="{if $lang === 'en'}/en/contact{else}/cs/kontakt{/if}">{if $lang === 'en'}Request a quote{else}Nezávazná poptávka{/if}<i class="fa-solid fa-arrow-right"></i></a>
+			<a class="button button--small button--navy header__cta" href="/kontakt">Nezávazná poptávka<i class="fa-solid fa-arrow-right"></i></a>
 		</div>
 	</header>
 	{foreach $flashes as $flash}<div class="site-flash site-flash--{$flash->type}" role="status">{$flash->message}</div>{/foreach}
 	<main id="main">{include content}</main>
 	<footer class="site-footer">
 		<div class="container footer__main">
-			<div class="footer__brand"><a href="{if $lang === 'en'}/en/{else}/cs/{/if}"><img src="/images/tiara-logo-light.svg" width="206" height="60" alt="TIARA s.r.o."></a><p>{if $lang === 'en'}Construction, renovation and modernisation with quality you can rely on.{else}Výstavba, rekonstrukce a modernizace s kvalitou, na kterou se můžete spolehnout.{/if}</p></div>
-			<div><span class="footer__label">{if $lang === 'en'}Explore{else}Prozkoumejte{/if}</span><div class="footer__links"><a href="{if $lang === 'en'}/en/about{else}/cs/o-nas{/if}">{$labels['about']}</a><a href="{if $lang === 'en'}/en/services{else}/cs/sluzby{/if}">{$labels['services']}</a><a href="{if $lang === 'en'}/en/projects{else}/cs/realizace{/if}">{$labels['projects']}</a></div></div>
+			<div class="footer__brand"><a href="/"><img src="/images/tiara-logo-light.svg" width="206" height="60" alt="TIARA s.r.o."></a><p>Výstavba, rekonstrukce a modernizace s kvalitou, na kterou se můžete spolehnout.</p></div>
+			<div><span class="footer__label">Prozkoumejte</span><div class="footer__links"><a href="/o-nas">{$labels['about']}</a><a href="/sluzby">{$labels['services']}</a><a href="/realizace">{$labels['projects']}</a></div></div>
 			<div><span class="footer__label">TIARA s.r.o.</span><div class="footer__links"><a href="tel:{$company['phone'] ?? '+420000000000'}">{$company['phone'] ?? '+420 000 000 000'}</a><a href="mailto:{$company['email'] ?? 'info@tiara-stavby.cz'}">{$company['email'] ?? 'info@tiara-stavby.cz'}</a><span>{$company['address'] ?? 'Česká republika'}</span></div></div>
-			<div class="footer__contact"><span class="footer__label">{if $lang === 'en'}Have a project in mind?{else}Máte projekt v plánu?{/if}</span><a class="footer__arrow" href="{if $lang === 'en'}/en/contact{else}/cs/kontakt{/if}">{$labels['contactUs']} <i class="fa-solid fa-arrow-right"></i></a></div>
+			<div class="footer__contact"><span class="footer__label">Máte projekt v plánu?</span><a class="footer__arrow" href="/kontakt">{$labels['contactUs']} <i class="fa-solid fa-arrow-right"></i></a></div>
 		</div>
-		<div class="container footer__bottom"><span>© {date('Y')} TIARA s.r.o.</span><span>{if $lang === 'en'}All rights reserved.{else}Všechna práva vyhrazena.{/if}</span><a href="/sitemap.xml">Sitemap</a></div>
+		<div class="container footer__bottom"><span>© {date('Y')} TIARA s.r.o.</span><span>Všechna práva vyhrazena.</span><a href="/sitemap.xml">Sitemap</a></div>
 	</footer>
 	<script src="/js/site.js" defer></script>
 </body>

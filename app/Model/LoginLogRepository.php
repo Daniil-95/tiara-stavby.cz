@@ -20,4 +20,13 @@ final class LoginLogRepository
 			'user_agent' => $userAgent ? substr($userAgent, 0, 255) : null,
 		]);
 	}
+
+	public function countRecentFailures(string $ipAddress): int
+	{
+		return $this->database->table('login_logs')
+			->where('ip_address', $ipAddress)
+			->where('success', 0)
+			->where('created_at > ?', new \DateTimeImmutable('-15 minutes'))
+			->count('*');
+	}
 }

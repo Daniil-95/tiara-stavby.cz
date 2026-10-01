@@ -18,13 +18,17 @@ final class UserAuthenticator implements Authenticator
 
 	public function authenticate(string $username, string $password): SimpleIdentity
 	{
+		$ipAddress = $this->request->getRemoteAddress() ?: 'unknown';
+		if ($this->loginLogs->countRecentFailures($ipAddress) >= 8) {
+			throw new AuthenticationException('Too many attempts.');
+		}
 		$user = $this->users->findActiveByEmail($username);
 		$valid = $user && $this->passwords->verify($password, $user->password_hash);
 		$this->loginLogs->record(
 			$valid ? (int) $user->id : null,
 			$username,
 			(bool) $valid,
-			$this->request->getRemoteAddress() ?: 'unknown',
+			$ipAddress,
 			$this->request->getHeader('User-Agent'),
 		);
 		if (!$valid) throw new AuthenticationException('Invalid credentials.');

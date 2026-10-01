@@ -19,9 +19,4 @@ final class DashboardPresenter extends BasePresenter
 		$this->template->latestInquiries = $this->database->table('inquiries')->order('created_at DESC')->limit(5)->fetchAll();
 	}
 
-	public function actionLogout(): void
-	{
-		$this->getUser()->logout(true);
-		$this->redirect('Login:default');
-	}
 }

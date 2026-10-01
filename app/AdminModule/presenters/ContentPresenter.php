@@ -44,7 +44,6 @@ final class ContentPresenter extends BasePresenter
 		$this->template->projectOptions = $this->projectOptions();
 		$this->template->galleryProjectId = (int) ($this->getParameter('project_id') ?? 0);
 		$this->template->filteredStatus = $this->getParameter('status');
-		$this->template->adminLang = in_array($this->getParameter('lang'), ['cs', 'en'], true) ? $this->getParameter('lang') : 'cs';
 	}
 
 	protected function createComponentEntryForm(): Form
@@ -163,22 +162,22 @@ final class ContentPresenter extends BasePresenter
 	{
 		switch ($this->section) {
 			case 'projects':
-				$form->addSelect('lang', 'Jazyk', ['cs' => 'Čeština', 'en' => 'English'])->setRequired();
+				$form->addHidden('lang')->setDefaultValue('cs');
 				$form->addText('title', 'Název')->setRequired(); $form->addText('slug', 'URL slug')->setRequired();
-				$form->addSelect('category', 'Kategorie', ['Výstavba' => 'Výstavba', 'Rekonstrukce' => 'Rekonstrukce', 'Modernizace' => 'Modernizace', 'Komerční objekty' => 'Komerční objekty', 'Construction' => 'Construction', 'Renovation' => 'Renovation', 'Modernisation' => 'Modernisation', 'Commercial' => 'Commercial'])->setRequired();
+				$form->addSelect('category', 'Kategorie', ['Výstavba' => 'Výstavba', 'Rekonstrukce' => 'Rekonstrukce', 'Modernizace' => 'Modernizace', 'Komerční objekty' => 'Komerční objekty'])->setRequired();
 				$form->addText('location', 'Lokalita')->setRequired(); $form->addText('year', 'Rok')->setRequired();
 				$form->addTextArea('short_description', 'Krátký popis')->setRequired(); $form->addTextArea('description', 'Popis')->setRequired();
 				$form->addUpload('image', 'Hlavní fotografie')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024);
 				$form->addCheckbox('active', 'Publikovat')->setDefaultValue(true); $form->addCheckbox('featured', 'Doporučený projekt'); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
 				break;
 			case 'services':
-				$form->addSelect('lang', 'Jazyk', ['cs' => 'Čeština', 'en' => 'English'])->setRequired();
+				$form->addHidden('lang')->setDefaultValue('cs');
 				$form->addText('title', 'Název')->setRequired(); $form->addText('slug', 'URL slug')->setRequired(); $form->addTextArea('short_description', 'Krátký popis')->setRequired();
 				$form->addTextArea('content', 'Obsah')->setRequired(); $form->addUpload('image', 'Fotografie')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024);
 				$form->addText('icon', 'Font Awesome class')->setDefaultValue('fa-solid fa-house'); $form->addCheckbox('active', 'Publikovat')->setDefaultValue(true); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
 				break;
 			case 'pages':
-				$form->addText('section_key', 'Klíč sekce')->setRequired(); $form->addSelect('lang', 'Jazyk', ['cs' => 'Čeština', 'en' => 'English'])->setRequired();
+				$form->addText('section_key', 'Klíč sekce')->setRequired(); $form->addHidden('lang')->setDefaultValue('cs');
 				$form->addText('title', 'Nadpis')->setRequired(); $form->addText('subtitle', 'Podnadpis'); $form->addTextArea('content', 'Obsah')->setRequired(); $form->addText('image_path', 'Cesta k obrázku'); $form->addCheckbox('active', 'Aktivní')->setDefaultValue(true); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
 				break;
 			case 'inquiries':
@@ -188,10 +187,10 @@ final class ContentPresenter extends BasePresenter
 				$form->addText('setting_key', 'Klíč')->setRequired(); $form->addTextArea('setting_value', 'Hodnota')->setRequired(); $form->addText('setting_group', 'Skupina')->setRequired();
 				break;
 			case 'navigation':
-				$form->addSelect('lang', 'Jazyk', ['cs' => 'Čeština', 'en' => 'English'])->setRequired(); $form->addText('title', 'Název')->setRequired(); $form->addText('url', 'URL')->setRequired()->addRule($form::MaxLength, null, 255); $form->addCheckbox('active', 'Aktivní')->setDefaultValue(true); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
+				$form->addHidden('lang')->setDefaultValue('cs'); $form->addText('title', 'Název')->setRequired(); $form->addText('url', 'URL')->setRequired()->addRule($form::MaxLength, null, 255); $form->addCheckbox('active', 'Aktivní')->setDefaultValue(true); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
 				break;
 			case 'seo':
-				$form->addText('page_path', 'Cesta stránky')->setRequired(); $form->addSelect('lang', 'Jazyk', ['cs' => 'Čeština', 'en' => 'English'])->setRequired(); $form->addText('meta_title', 'Meta title'); $form->addTextArea('meta_description', 'Meta description'); $form->addText('og_title', 'OG title'); $form->addTextArea('og_description', 'OG description'); $form->addText('og_image', 'OG image URL'); $form->addText('canonical_url', 'Canonical URL'); $form->addText('robots', 'Robots')->setDefaultValue('index,follow');
+				$form->addText('page_path', 'Cesta stránky')->setRequired(); $form->addHidden('lang')->setDefaultValue('cs'); $form->addText('meta_title', 'Meta title'); $form->addTextArea('meta_description', 'Meta description'); $form->addText('og_title', 'OG title'); $form->addTextArea('og_description', 'OG description'); $form->addText('og_image', 'OG image URL'); $form->addText('canonical_url', 'Canonical URL'); $form->addText('robots', 'Robots')->setDefaultValue('index,follow');
 				break;
 			case 'gallery':
 				$form->addSelect('project_id', 'Projekt', $this->projectOptions())->setRequired(); $form->addUpload('image', 'Fotografie')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024); $form->addText('title', 'Název'); $form->addText('alt_text', 'Alternativní text')->setRequired(); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
@@ -215,15 +214,14 @@ final class ContentPresenter extends BasePresenter
 			return $selection->limit(250)->fetchAll();
 		}
 		$selection = $this->database->table(self::TABLES[$this->section])->order('id DESC');
-		$lang = $this->getParameter('lang');
-		if (in_array($this->section, ['projects', 'services', 'pages', 'navigation', 'seo'], true) && in_array($lang, ['cs', 'en'], true)) $selection->where('lang', $lang);
+		if (in_array($this->section, ['projects', 'services', 'pages', 'navigation', 'seo'], true)) $selection->where('lang', 'cs');
 		return $selection->limit(250)->fetchAll();
 	}
 
 	private function projectOptions(): array
 	{
 		$options = [];
-		foreach ($this->database->table('projects')->order('title ASC')->fetchAll() as $project) $options[$project->id] = $project->title . ' (' . strtoupper($project->lang) . ')';
+		foreach ($this->database->table('projects')->where('lang', 'cs')->order('title ASC')->fetchAll() as $project) $options[$project->id] = $project->title;
 		return $options;
 	}
 

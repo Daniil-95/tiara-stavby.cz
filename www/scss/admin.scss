@@ -28,6 +28,11 @@ img { display: block; max-width: 100%; }
 .admin-sidebar nav a.is-active i { color: $sand; }
 .admin-sidebar__bottom { display: grid; gap: 2px; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba($white,.12); }
 .admin-sidebar__bottom a:hover { color: $white; }
+.admin-logout-form { margin: 0; }
+.admin-logout-form table, .admin-logout-form tbody, .admin-logout-form tr, .admin-logout-form th, .admin-logout-form td { display: block; margin: 0; padding: 0; }
+.admin-logout-form tr:has(input[type=hidden]) { display: none; }
+.admin-logout-button { display: flex; width: 100%; min-height: 42px; align-items: center; padding: 0 11px; border: 0; border-radius: 3px; background: transparent; color: rgba($white,.72); cursor: pointer; font: inherit; font-size: 12px; text-align: left; }
+.admin-logout-button:hover, .admin-logout-button:focus-visible { background: rgba($white,.09); color: $white; }
 .admin-main { display: flex; min-width: 0; min-height: 100vh; flex-direction: column; grid-column: 2; }
 .admin-topbar { position: sticky; z-index: 10; top: 0; display: flex; min-height: 77px; align-items: center; gap: 16px; padding-inline: 36px; border-bottom: 1px solid $line; background: rgba($white,.95); backdrop-filter: blur(12px); }
 .admin-topbar > div:first-of-type { display: grid; }

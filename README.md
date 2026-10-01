@@ -1,6 +1,6 @@
 # TIARA s.r.o. — stavební práce
 
-Dvojjazyčný web (čeština / angličtina) s veřejnou prezentací, MySQL obsahem a administrační částí na Nette Framework 3.2 + Latte 3. Vyžaduje PHP 8.2+, MySQL 8+, Composer a Node.js.
+Český web s veřejnou prezentací, MySQL obsahem a administrační částí na Nette Framework 3.2 + Latte 3. Vyžaduje PHP 8.2+, MySQL 8+, Composer a Node.js.
 
 ## Instalace
 
@@ -12,6 +12,7 @@ Dvojjazyčný web (čeština / angličtina) s veřejnou prezentací, MySQL obsah
    mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/003_project_categories.sql
    mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/004_seed_project_galleries.sql
    mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/005_content_language_constraints.sql
+   mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/006_czech_routes.sql
    ```
 
 2. Установите PHP-зависимости и задайте доступ к MySQL в `app/config/local.neon` (не размещайте реальные секреты в Git):
@@ -34,7 +35,7 @@ Dvojjazyčný web (čeština / angličtina) s veřejnou prezentací, MySQL obsah
    php -d upload_max_filesize=8M -d post_max_size=10M -S 127.0.0.1:8000 -t www www/router.php
    ```
 
-   Затем откройте `http://127.0.0.1:8000/cs/`, английская версия: `/en/`, админка: `/admin`.
+   Затем откройте `http://127.0.0.1:8000/`, английская версия: `/en/`, админка: `/admin`.
 
 ## Структура
 

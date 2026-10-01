@@ -53,7 +53,6 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .topline a:hover { color: $sand-light; }
 .topline a i { margin-right: 5px; color: $sand-light; }
 .topline__separator { width: 1px; height: 13px; background: rgba($white,.26); }
-.language-switch { font-weight: 700; letter-spacing: .13em; }
 .site-header { position: sticky; z-index: 50; top: 0; height: 90px; background: rgba($paper,.97); border-bottom: 1px solid rgba($navy,.07); transition: height .25s ease, box-shadow .25s ease; backdrop-filter: blur(14px); }
 .site-header.is-scrolled { height: 76px; box-shadow: 0 10px 30px rgba($navy,.07); }
 .header__inner { display: flex; height: 100%; align-items: center; justify-content: space-between; gap: 28px; }
@@ -64,6 +63,8 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .nav-link::after { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; transform: scaleX(0); transform-origin: left; background: $sand; content: ''; transition: transform .25s ease; }
 .nav-link:hover, .nav-link.is-active { color: $sand; }
 .nav-link:hover::after, .nav-link.is-active::after { transform: scaleX(1); }
+.nav-link--admin { gap: 7px; color: $steel; }
+.nav-link--admin i { color: $sand; font-size: 11px; }
 .header__cta { white-space: nowrap; }
 .menu-toggle { display: none; }
 .site-flash { position: relative; z-index: 4; padding: 12px max(24px, calc((100% - 1320px) / 2)); background: #edf4ed; color: #365c38; font-size: 12px; }
@@ -385,6 +386,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.main-nav { position: fixed; z-index: 3; inset: 110px 0 0; display: flex; height: auto; flex-direction: column; align-items: stretch; gap: 0; padding: 25px 30px 120px; transform: translateX(102%); background: $paper; transition: transform .34s cubic-bezier(.7,0,.2,1); }
 	.main-nav.is-open { transform: translateX(0); }
 	.nav-link { min-height: 62px; border-bottom: 1px solid $rule; font-family: $display; font-size: 22px; }
+	.nav-link--admin { color: $navy; }
 	.nav-link::after { display: none; }
 	.header__cta { min-height: 40px; padding-inline: 12px; font-size: 8px; }
 	.topline { height: 30px; font-size: 9px; }

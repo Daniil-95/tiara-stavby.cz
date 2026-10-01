@@ -1,6 +1,6 @@
 {
   "name": "tiara/stavby",
-  "description": "Bilingual construction company website and CMS for TIARA s.r.o.",
+  "description": "Czech construction company website and CMS for TIARA s.r.o.",
   "type": "project",
   "require": {
     "php": ">=8.2",

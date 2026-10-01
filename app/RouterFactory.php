@@ -14,25 +14,14 @@ final class RouterFactory
 		$router = new RouteList;
 		$router->addRoute('admin', 'Admin:Dashboard:default');
 		$router->addRoute('admin/login', 'Admin:Login:default');
-		$router->addRoute('admin/logout', 'Admin:Dashboard:logout');
 		$router->addRoute('admin/<section>[/<operation>[/<id \\d+>]]', 'Admin:Content:default');
 		$router->addRoute('sitemap.xml', 'Front:Sitemap:default');
-		$router->addRoute('<lang cs|en>/', 'Front:Home:default');
-		$router->addRoute('', ['module' => 'Front', 'presenter' => 'Home', 'action' => 'default', 'lang' => 'cs']);
-
-		foreach (['cs', 'en'] as $lang) {
-			$prefix = $lang . '/';
-			$routes = $lang === 'cs'
-				? ['o-nas' => 'about', 'sluzby' => 'services', 'realizace' => 'projects', 'reference' => 'gallery', 'kontakt' => 'contact', 'dekujeme' => 'thanks']
-				: ['about' => 'about', 'services' => 'services', 'projects' => 'projects', 'references' => 'gallery', 'contact' => 'contact', 'thank-you' => 'thanks'];
-			foreach ($routes as $path => $action) {
-				$router->addRoute($prefix . $path, ['module' => 'Front', 'presenter' => 'Pages', 'action' => $action, 'lang' => $lang]);
-			}
-			$servicePath = $lang === 'cs' ? 'sluzby' : 'services';
-			$projectPath = $lang === 'cs' ? 'realizace' : 'projects';
-			$router->addRoute($prefix . $servicePath . '/<slug>', ['module' => 'Front', 'presenter' => 'Pages', 'action' => 'service', 'lang' => $lang]);
-			$router->addRoute($prefix . $projectPath . '/<id \\d+>', ['module' => 'Front', 'presenter' => 'Pages', 'action' => 'project', 'lang' => $lang]);
+		$router->addRoute('', 'Front:Home:default');
+		foreach (['o-nas' => 'about', 'sluzby' => 'services', 'realizace' => 'projects', 'reference' => 'gallery', 'kontakt' => 'contact', 'dekujeme' => 'thanks'] as $path => $action) {
+			$router->addRoute($path, ['module' => 'Front', 'presenter' => 'Pages', 'action' => $action]);
 		}
+		$router->addRoute('sluzby/<slug>', 'Front:Pages:service');
+		$router->addRoute('realizace/<id \\d+>', 'Front:Pages:project');
 		$router->addRoute('<path .+>', 'Front:Error:default');
 		return $router;
 	}

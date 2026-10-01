@@ -12,36 +12,36 @@ final class PagesPresenter extends BasePresenter
 
 	public function renderAbout(): void
 	{
-		$this->template->section = $this->pages->section('about', $this->lang);
-		$this->template->pageTitle = $this->lang === 'en' ? 'About TIARA' : 'O společnosti TIARA';
+		$this->template->section = $this->pages->section('about', 'cs');
+		$this->template->pageTitle = 'O společnosti TIARA';
 	}
 
 	public function renderServices(): void
 	{
-		$this->template->services = $this->services->all($this->lang);
-		$this->template->pageTitle = $this->lang === 'en' ? 'Construction services' : 'Stavební služby';
+		$this->template->services = $this->services->all('cs');
+		$this->template->pageTitle = 'Stavební služby';
 	}
 
 	public function actionService(string $slug): void
 	{
-		$service = $this->services->findBySlug($slug, $this->lang);
+		$service = $this->services->findBySlug($slug, 'cs');
 		if (!$service) $this->error('Service not found.');
 		$this->template->service = $service;
 	}
 
 	public function renderProjects(?string $category = null): void
 	{
-		$categories = $this->lang === 'en' ? ['Construction', 'Renovation', 'Modernisation', 'Commercial'] : ['Výstavba', 'Rekonstrukce', 'Modernizace', 'Komerční objekty'];
+		$categories = ['Výstavba', 'Rekonstrukce', 'Modernizace', 'Komerční objekty'];
 		if (!in_array($category, $categories, true)) $category = null;
-		$this->template->projects = $this->projects->all($this->lang, $category);
+		$this->template->projects = $this->projects->all('cs', $category);
 		$this->template->categories = $categories;
 		$this->template->selectedCategory = $category;
-		$this->template->pageTitle = $this->lang === 'en' ? 'Selected projects' : 'Vybrané realizace';
+		$this->template->pageTitle = 'Vybrané realizace';
 	}
 
 	public function actionProject(int $id): void
 	{
-		$project = $this->projects->find($id, $this->lang);
+		$project = $this->projects->find($id, 'cs');
 		if (!$project) $this->error('Project not found.');
 		$this->template->project = $project;
 		$this->template->images = $this->projects->gallery($id);
@@ -50,18 +50,18 @@ final class PagesPresenter extends BasePresenter
 
 	public function renderGallery(): void
 	{
-		$this->template->projects = $this->projects->all($this->lang);
-		$this->template->pageTitle = $this->lang === 'en' ? 'Our references' : 'Naše reference';
+		$this->template->projects = $this->projects->all('cs');
+		$this->template->pageTitle = 'Naše reference';
 	}
 
 	public function renderContact(): void
 	{
-		$this->template->pageTitle = $this->lang === 'en' ? 'Contact TIARA' : 'Kontaktujte TIARA';
+		$this->template->pageTitle = 'Kontaktujte TIARA';
 	}
 
 	public function renderThanks(): void
 	{
-		$this->template->pageTitle = $this->lang === 'en' ? 'Thank you' : 'Děkujeme';
+		$this->template->pageTitle = 'Děkujeme';
 	}
 
 	public function renderError(\Throwable $exception): void
