@@ -14,7 +14,7 @@ Projekt používá PHP 8.2, Nette Framework 3.2, šablony Latte 3 a databázi My
 
 1. Nainstalujte PHP 8.2 nebo novější, MySQL 8, Composer a Node.js. PHP musí mít zapnutá rozšíření `fileinfo`, `gd`, `mbstring`, `pdo` a `pdo_mysql`.
 2. Nastavte připojení k databázi v `app/config/local.neon`. Tento soubor obsahuje místní údaje, které nepatří do verzovacího systému.
-3. Spusťte SQL soubory z adresáře `db/` postupně od `001_initial_schema.sql` do `007_remove_references.sql`. První soubor vytvoří databázi `tiara_stavby`.
+3. Spusťte SQL soubory z adresáře `db/` postupně od `001_initial_schema.sql` do `008_contact_anchor.sql`. První soubor vytvoří databázi `tiara_stavby`.
 4. Nainstalujte závislosti, sestavte styly a vytvořte účet správce:
 
    ```sh

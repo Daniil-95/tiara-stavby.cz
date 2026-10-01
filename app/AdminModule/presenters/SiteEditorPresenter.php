@@ -20,7 +20,7 @@ final class SiteEditorPresenter extends BasePresenter
 	];
 	private const SEO_PAGES = [
 		'/' => 'Úvodní stránka', '/o-nas' => 'O nás', '/sluzby' => 'Služby',
-		'/realizace' => 'Realizace', '/kontakt' => 'Kontakt',
+		'/realizace' => 'Realizace',
 	];
 
 	private string $page = 'home';
@@ -208,7 +208,7 @@ final class SiteEditorPresenter extends BasePresenter
 				'cta_line_two' => $this->setting('home_cta_line_two', 'NEBO REKONSTRUKCI?'),
 				'cta_text' => $this->section('cta')['content'] ?? '',
 				'cta_button' => $this->setting('home_cta_button', 'Nezávazná poptávka'),
-				'cta_url' => $this->setting('home_cta_url', '/kontakt'),
+				'cta_url' => $this->setting('home_cta_url', '/#contact'),
 			];
 		}
 
@@ -229,7 +229,7 @@ final class SiteEditorPresenter extends BasePresenter
 			'facebook' => $this->setting('facebook', ''), 'instagram' => $this->setting('instagram', ''),
 			'linkedin' => $this->setting('linkedin', ''), 'tagline' => $this->setting('tagline', 'Stavíme s jistotou.'),
 			'header_cta_label' => $this->setting('header_cta_label', 'Nezávazná poptávka'),
-			'header_cta_url' => $this->setting('header_cta_url', '/kontakt'),
+			'header_cta_url' => $this->setting('header_cta_url', '/#contact'),
 		];
 		if ($this->page === 'seo') {
 			$path = (string) ($this->getParameter('path') ?? '/');

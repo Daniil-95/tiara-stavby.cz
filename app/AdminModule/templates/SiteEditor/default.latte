@@ -81,7 +81,7 @@
 		{else}
 			<section class="editor-preview-card"><h2>Kontaktní údaje</h2><dl><div><dt>Telefon</dt><dd>{$editorData['phone']}</dd></div><div><dt>E-mail</dt><dd>{$editorData['email']}</dd></div><div><dt>Adresa</dt><dd>{$editorData['address']}</dd></div><div><dt>Otevírací doba</dt><dd>{$editorData['hours']}</dd></div></dl></section>
 		{/if}
-		{if $editorPage !== 'settings'}<a class="editor-preview-link" href="{if $editorPage === 'home'}/{elseif $editorPage === 'about'}/o-nas{elseif $editorPage === 'seo'}{$editorData['seo_path']}{else}/kontakt{/if}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Otevřít stránku webu</a>{/if}
+		{if $editorPage !== 'settings'}<a class="editor-preview-link" href="{if $editorPage === 'home'}/{elseif $editorPage === 'about'}/o-nas{elseif $editorPage === 'seo'}{$editorData['seo_path']}{else}/#contact{/if}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Otevřít stránku webu</a>{/if}
 	</aside>
 </div>
 {/block}

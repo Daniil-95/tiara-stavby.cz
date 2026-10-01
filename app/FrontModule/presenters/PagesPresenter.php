@@ -48,11 +48,6 @@ final class PagesPresenter extends BasePresenter
 		$this->template->pageTitle = $project['title'];
 	}
 
-	public function renderContact(): void
-	{
-		$this->template->pageTitle = 'Kontaktujte TIARA';
-	}
-
 	public function renderThanks(): void
 	{
 		$this->template->pageTitle = 'Děkujeme';
