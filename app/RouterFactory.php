@@ -16,11 +16,12 @@ final class RouterFactory
 		$router->addRoute('admin/login', 'Admin:Login:default');
 		$router->addRoute('admin/logout', 'Admin:Dashboard:logout');
 		$router->addRoute('admin/<section>[/<operation>[/<id \\d+>]]', 'Admin:Content:default');
+		$router->addRoute('sitemap.xml', 'Front:Sitemap:default');
+		$router->addRoute('<lang cs|en>/', 'Front:Home:default');
 		$router->addRoute('', ['module' => 'Front', 'presenter' => 'Home', 'action' => 'default', 'lang' => 'cs']);
 
 		foreach (['cs', 'en'] as $lang) {
 			$prefix = $lang . '/';
-			$router->addRoute($lang, ['module' => 'Front', 'presenter' => 'Home', 'action' => 'default', 'lang' => $lang]);
 			$routes = $lang === 'cs'
 				? ['o-nas' => 'about', 'sluzby' => 'services', 'realizace' => 'projects', 'reference' => 'gallery', 'kontakt' => 'contact', 'dekujeme' => 'thanks']
 				: ['about' => 'about', 'services' => 'services', 'projects' => 'projects', 'references' => 'gallery', 'contact' => 'contact', 'thank-you' => 'thanks'];

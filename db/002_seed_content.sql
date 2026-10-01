@@ -1,17 +1,18 @@
 USE tiara_stavby;
+SET NAMES utf8mb4 COLLATE utf8mb4_czech_ci;
 
 INSERT INTO settings (setting_key, setting_value, setting_group) VALUES
 ('company_name','TIARA s.r.o.','general'),
-('phone','+420 777 123 456','contact'),
+('phone','+420 000 000 000','contact'),
 ('email','info@tiara-stavby.cz','contact'),
-('address','Praha, Česká republika','contact'),
+('address','Česká republika','contact'),
 ('hours','Po–Pá 8:00–17:00','contact'),
 ('ico','','legal'),('dic','','legal'),
 ('facebook','','social'),('instagram','','social'),('linkedin','','social'),
 ('google_maps_url','','contact'),('admin_email','info@tiara-stavby.cz','general'),
 ('stat_projects','100+','general'),('stat_years','10+','general'),('stat_satisfaction','100%','general'),
 ('tagline','Stavíme s jistotou.','general')
-ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value);
+ON DUPLICATE KEY UPDATE setting_value=VALUES(setting_value), setting_group=VALUES(setting_group);
 
 INSERT INTO services (lang,title,slug,short_description,content,image_path,icon,active,sort_order) VALUES
 ('cs','Výstavba','vystavba','Rodinné domy a komerční objekty postavené s důrazem na detail.','Od prvního návrhu po předání klíčů zajistíme koordinaci řemesel, dodávky materiálů i kontrolu kvality. Každou stavbu plánujeme podle potřeb klienta a držíme se dohodnutého rozpočtu i harmonogramu.',NULL,'fa-solid fa-house',1,1),
@@ -20,7 +21,7 @@ INSERT INTO services (lang,title,slug,short_description,content,image_path,icon,
 ('en','Construction','construction','Private homes and commercial buildings made with care for every detail.','From the first consultation to the handover, we coordinate trades, materials and quality checks. Every build is planned around your needs, budget and agreed schedule.',NULL,'fa-solid fa-house',1,1),
 ('en','Renovation','renovation','A new chapter for apartments, houses and commercial spaces.','We manage renovations with respect for the building and your day-to-day life. Our team coordinates demolition, utilities, surfaces and final details.',NULL,'fa-solid fa-hammer',1,2),
 ('en','Modernisation','modernisation','Better comfort, lower running costs and greater property value.','We deliver upgrades that extend a building’s life and improve its energy and practical performance, from insulation to interior renewal.',NULL,'fa-solid fa-arrows-rotate',1,3)
-ON DUPLICATE KEY UPDATE title=VALUES(title);
+ON DUPLICATE KEY UPDATE title=VALUES(title), short_description=VALUES(short_description), content=VALUES(content), image_path=VALUES(image_path), icon=VALUES(icon), active=VALUES(active), sort_order=VALUES(sort_order);
 
 INSERT INTO projects (lang,title,slug,category,location,year,short_description,description,main_image,active,featured,sort_order) VALUES
 ('cs','Rodinný dům Na Vyhlídce','dum-na-vyhlidce','Výstavba','Praha-západ',2025,'Novostavba rodinného domu s čistou architekturou a velkorysým výhledem.','Kompletní realizace domu od přípravy pozemku až po finální povrchy. Hlavní důraz jsme kladli na přesnost detailů, přirozené světlo a dlouhodobě úsporný provoz.','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85',1,1,1),
@@ -29,7 +30,7 @@ INSERT INTO projects (lang,title,slug,category,location,year,short_description,d
 ('en','Hilltop Family House','hilltop-family-house','Construction','West Prague',2025,'A contemporary new home shaped around light, space and the landscape.','A complete build from site preparation to final finishes, with careful attention to detail, natural light and long-term efficiency.','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85',1,1,1),
 ('en','A New Chapter for a City Apartment','vinohrady-apartment','Renovation','Prague 2',2024,'A thoughtful renovation that preserved the spirit of the original apartment.','New utilities, a more practical layout, restored timber floors and bespoke joinery bring contemporary comfort to the original architecture.','https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=85',1,1,2),
 ('en','Karlín Workspaces','karlin-workspaces','Commercial','Prague 8',2024,'A flexible workplace modernisation for a growing team.','An improved workplace focused on acoustics, quality light and flexible zones. Works were delivered in carefully planned phases while the office remained open.','https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=85',1,1,3)
-ON DUPLICATE KEY UPDATE title=VALUES(title);
+ON DUPLICATE KEY UPDATE title=VALUES(title), slug=VALUES(slug), category=VALUES(category), location=VALUES(location), year=VALUES(year), short_description=VALUES(short_description), description=VALUES(description), main_image=VALUES(main_image), active=VALUES(active), featured=VALUES(featured), sort_order=VALUES(sort_order);
 
 INSERT INTO page_sections (section_key,lang,title,subtitle,content,image_path,active,sort_order) VALUES
 ('about','cs','Spolehlivý stavební partner','TIARA s.r.o.','Pracujeme pro soukromé i firemní klienty. Spojujeme zkušené řemeslo s moderními technologiemi, držíme se dohod a termínů a každému projektu věnujeme individuální pozornost. Od úvodní konzultace až po předání hotového díla máte jednoho partnera, který za výsledek odpovídá.',NULL,1,1),
@@ -38,14 +39,29 @@ INSERT INTO page_sections (section_key,lang,title,subtitle,content,image_path,ac
 ('home_intro','en','Building a better future','Construction, renovation, modernisation','Quality construction, renovation and modernisation for your home and business.',NULL,1,1),
 ('cta','cs','Plánujete stavbu nebo rekonstrukci?','Pojďme ji společně proměnit v realitu.','Ozvěte se nám. Připravíme řešení podle vašich představ, rozpočtu a termínu.',NULL,1,1),
 ('cta','en','Planning a build or renovation?','Let’s bring it to life together.','Tell us what you have in mind. We will shape a plan around your brief, budget and timeline.',NULL,1,1),
-('stats','cs','TIARA v číslech','Zkušenost, na kterou se můžete spolehnout.','100+ realizovaných projektů|10+ let zkušeností|100% osobní přístup|Stavíme s jistotou.',NULL,1,1),
-('stats','en','TIARA in numbers','Experience you can rely on.','100+ completed projects|10+ years of experience|100% personal approach|Built with confidence.',NULL,1,1)
-ON DUPLICATE KEY UPDATE title=VALUES(title);
+('stats','cs','TIARA v číslech','Zkušenost, na kterou se můžete spolehnout.','100+ realizovaných projektů|10+ let zkušeností|100% spokojených zákazníků|Stavíme s jistotou.',NULL,1,1),
+('stats','en','TIARA in numbers','Experience you can rely on.','100+ completed projects|10+ years of experience|100% satisfied customers|Built with confidence.',NULL,1,1)
+ON DUPLICATE KEY UPDATE title=VALUES(title), subtitle=VALUES(subtitle), content=VALUES(content), image_path=VALUES(image_path), active=VALUES(active), sort_order=VALUES(sort_order);
 
 INSERT INTO navigation (lang,title,url,active,sort_order) VALUES
 ('cs','Domů','/cs/',1,1),('cs','O nás','/cs/o-nas',1,2),('cs','Služby','/cs/sluzby',1,3),('cs','Realizace','/cs/realizace',1,4),('cs','Reference','/cs/reference',1,5),('cs','Kontakt','/cs/kontakt',1,6),
-('en','Home','/en/',1,1),('en','About','/en/about',1,2),('en','Services','/en/services',1,3),('en','Projects','/en/projects',1,4),('en','References','/en/references',1,5),('en','Contact','/en/contact',1,6);
+('en','Home','/en/',1,1),('en','About','/en/about',1,2),('en','Services','/en/services',1,3),('en','Projects','/en/projects',1,4),('en','References','/en/references',1,5),('en','Contact','/en/contact',1,6)
+ON DUPLICATE KEY UPDATE title=VALUES(title), active=VALUES(active), sort_order=VALUES(sort_order);
 
 INSERT INTO seo_metadata (page_path,lang,meta_title,meta_description,og_title,og_description,robots) VALUES
-('/','cs','TIARA s.r.o. | Veškeré stavební práce','Výstavba, rekonstrukce a modernizace pro váš domov i podnikání. Spolehlivý stavební partner z Prahy.','TIARA s.r.o. – stavíme vaši lepší budoucnost','Kvalitní stavby s důrazem na přesnost, kvalitu a termíny.','index,follow'),
-('/','en','TIARA s.r.o. | Construction, Renovation & Modernisation','A dependable construction partner for private homes and commercial spaces.','TIARA s.r.o. – building a better future','Quality construction, renovation and modernisation, delivered with care.','index,follow');
+('/','cs','TIARA s.r.o. | Veškeré stavební práce','Výstavba, rekonstrukce a modernizace pro váš domov i podnikání. Spolehlivý partner pro váš stavební projekt.','TIARA s.r.o. – stavíme vaši lepší budoucnost','Kvalitní stavby s důrazem na přesnost, kvalitu a termíny.','index,follow'),
+('/','en','TIARA s.r.o. | Construction, Renovation & Modernisation','A dependable construction partner for private homes and commercial spaces.','TIARA s.r.o. – building a better future','Quality construction, renovation and modernisation, delivered with care.','index,follow')
+ON DUPLICATE KEY UPDATE meta_title=VALUES(meta_title), meta_description=VALUES(meta_description), og_title=VALUES(og_title), og_description=VALUES(og_description), robots=VALUES(robots);
+
+INSERT INTO seo_metadata (page_path,lang,meta_title,meta_description,og_title,og_description,robots) VALUES
+('/o-nas','cs','O nás | TIARA s.r.o.','Poznejte stavební společnost TIARA s.r.o. a náš přístup k výstavbě, rekonstrukcím a modernizacím.','Spolehlivý stavební partner','Od první konzultace po předání hotového díla.','index,follow'),
+('/sluzby','cs','Stavební služby | TIARA s.r.o.','Výstavba rodinných domů, rekonstrukce bytů a modernizace nemovitostí.','Komplexní stavební práce','Jeden partner pro váš stavební projekt.','index,follow'),
+('/realizace','cs','Realizované projekty | TIARA s.r.o.','Prohlédněte si vybrané stavby, rekonstrukce a modernizace realizované společností TIARA.','Realizace TIARA s.r.o.','Stavby s péčí o každý detail.','index,follow'),
+('/reference','cs','Reference | TIARA s.r.o.','Galerie stavebních realizací TIARA s.r.o.','Naše reference','Domovy a místa pro práci, proměněná s péčí.','index,follow'),
+('/kontakt','cs','Kontakt | TIARA s.r.o.','Plánujete stavbu nebo rekonstrukci? Kontaktujte TIARA s.r.o. a probereme váš projekt.','Kontaktujte TIARA s.r.o.','Úvodní konzultace bez závazků.','index,follow'),
+('/about','en','About us | TIARA s.r.o.','Meet TIARA s.r.o., a dependable partner for construction, renovation and modernisation.','Your construction partner','From the first consultation to the final handover.','index,follow'),
+('/services','en','Construction services | TIARA s.r.o.','New homes, property renovations and modernisation, delivered with care.','TIARA construction services','One experienced partner for your project.','index,follow'),
+('/projects','en','Selected projects | TIARA s.r.o.','Explore homes, renovations and commercial spaces delivered by TIARA s.r.o.','TIARA project portfolio','Thoughtful work, lasting value.','index,follow'),
+('/references','en','References | TIARA s.r.o.','A gallery of construction work delivered by TIARA s.r.o.','Our references','Homes and workplaces transformed with care.','index,follow'),
+('/contact','en','Contact | TIARA s.r.o.','Planning a build or renovation? Contact TIARA s.r.o. to discuss your project.','Talk to TIARA','A first conversation costs nothing.','index,follow')
+ON DUPLICATE KEY UPDATE meta_title=VALUES(meta_title), meta_description=VALUES(meta_description), og_title=VALUES(og_title), og_description=VALUES(og_description), robots=VALUES(robots);

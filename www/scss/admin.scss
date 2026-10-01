@@ -113,6 +113,13 @@ img { display: block; max-width: 100%; }
 .admin-form-panel, .gallery-upload-panel { max-width: 980px; padding-bottom: 26px; }
 .admin-hint { color: $muted; font-size: 10px; }
 .admin-form-panel > form, .gallery-upload-panel > form { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 17px 20px; padding: 23px 24px 0; }
+.admin-form-panel > form > table, .gallery-upload-panel > form > table, .admin-form-panel > form > table > tbody, .gallery-upload-panel > form > table > tbody { display: contents; }
+.admin-form-panel > form > table > tbody > tr, .gallery-upload-panel > form > table > tbody > tr { display: grid; min-width: 0; grid-template-columns: minmax(0,1fr); align-content: start; gap: 6px; }
+.admin-form-panel > form > table > tbody > tr:has(textarea), .admin-form-panel > form > table > tbody > tr:has(input[type=checkbox]), .admin-form-panel > form > table > tbody > tr:has(input[type=file]), .admin-form-panel > form > table > tbody > tr:has([type=submit]), .admin-form-panel > form > table > tbody > tr:has(.error), .gallery-upload-panel > form > table > tbody > tr:has(textarea), .gallery-upload-panel > form > table > tbody > tr:has([type=submit]), .gallery-upload-panel > form > table > tbody > tr:has(.error) { grid-column: 1 / -1; }
+.admin-form-panel > form > table > tbody > tr:has(input[type=hidden]), .gallery-upload-panel > form > table > tbody > tr:has(input[type=hidden]) { display: none; }
+.admin-form-panel > form th, .admin-form-panel > form td, .gallery-upload-panel > form th, .gallery-upload-panel > form td { display: block; min-width: 0; padding: 0; text-align: left; }
+.admin-form-panel > form > table > tbody > tr:has(input[type=checkbox]) td label { display: inline-flex; align-items: center; gap: 8px; }
+.admin-form-panel > form > table > tbody > tr:has([type=submit]), .gallery-upload-panel > form > table > tbody > tr:has([type=submit]) { justify-self: start; }
 .admin-form-panel .form-group, .gallery-upload-panel .form-group { display: grid; align-content: start; gap: 6px; }
 .admin-form-panel .form-group:has(textarea), .gallery-upload-panel .form-group:has(textarea), .form-errors, .admin-form-panel .form-group:has(input[type=checkbox]), .admin-form-panel button[type=submit], .gallery-upload-panel button[type=submit] { grid-column: 1 / -1; }
 .admin-form-panel label, .gallery-upload-panel label { color: #536168; font-size: 10px; font-weight: 700; }
@@ -143,6 +150,29 @@ img { display: block; max-width: 100%; }
 .gallery-upload-panel > form { grid-template-columns: repeat(3,minmax(0,1fr)); }
 .gallery-upload-panel .form-group:has(input[type=file]) { grid-column: span 2; }
 .gallery-upload-panel button[type=submit] { grid-column: 1 / -1; }
+.gallery-sort-panel { margin-bottom: 18px; padding-bottom: 22px; }
+.gallery-filter { padding: 17px 21px; border-bottom: 1px solid $line; background: #fbfcfa; }
+.gallery-filter form { display: flex; align-items: center; gap: 11px; }
+.gallery-filter label { color: $muted; font-size: 10px; }
+.gallery-filter select { min-width: 235px; min-height: 36px; padding: 6px 9px; border: 1px solid $line; background: $white; font-size: 10px; }
+.gallery-filter .admin-button { min-height: 36px; }
+.gallery-sort-panel__heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 21px 14px; }
+.gallery-sort-panel__heading .admin-kicker { margin: 0 0 4px; }
+.gallery-sort-panel__heading h2 { margin: 0; color: $navy; font: 600 15px/1.3 'Manrope',sans-serif; }
+.gallery-sort-panel__heading > span { color: $muted; font-size: 9px; }
+.gallery-sort-form { display: grid; gap: 17px; padding: 0 21px; }
+.gallery-sort-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
+.gallery-sort-card { min-width: 0; padding: 8px; border: 1px solid $line; background: #fff; cursor: grab; transition: border-color .2s, opacity .2s, transform .2s; }
+.gallery-sort-card:hover { border-color: $sand; }
+.gallery-sort-card.is-dragging { opacity: .42; transform: scale(.98); }
+.gallery-sort-card__handle { display: flex; align-items: center; gap: 7px; margin: 2px 0 8px; color: $muted; font-size: 7px; font-weight: 700; letter-spacing: .1em; }
+.gallery-sort-card__handle i { color: $sand; }
+.gallery-sort-card > img { width: 100%; aspect-ratio: 1.35; object-fit: cover; background: $paper; }
+.gallery-sort-card > strong, .gallery-sort-card > small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gallery-sort-card > strong { margin-top: 8px; color: $navy; font-size: 9px; }
+.gallery-sort-card > small { color: $muted; font-size: 8px; }
+.gallery-sort-form > input[type=hidden] { display: none; }
+.gallery-sort-empty { min-height: 125px; }
 .login-page { position: relative; display: grid; min-height: 100vh; place-items: center; overflow: hidden; padding: 50px 20px; background: linear-gradient(130deg,#e7e7e1,#f8f8f5 53%,#e9e7df); }
 .login-page::before, .login-page::after { position: absolute; width: 660px; height: 660px; transform: rotate(45deg); border: 1px solid rgba($navy,.08); content: ''; }
 .login-page::before { top: -420px; left: -180px; }
@@ -155,6 +185,10 @@ img { display: block; max-width: 100%; }
 .login-card h1 { margin: 0; color: $navy; font: 600 27px 'Manrope',sans-serif; letter-spacing: -.04em; }
 .login-card__copy { margin: 5px 0 22px; color: $muted; font-size: 11px; }
 .login-card form { display: grid; gap: 14px; }
+.login-card form > table, .login-card form > table > tbody { display: contents; }
+.login-card form > table > tbody > tr { display: grid; gap: 5px; }
+.login-card form > table > tbody > tr:has(input[type=hidden]) { display: none; }
+.login-card form th, .login-card form td { display: block; padding: 0; text-align: left; }
 .login-card .form-group { display: grid; gap: 5px; }
 .login-card label { color: #647076; font-size: 10px; font-weight: 700; }
 .login-card input { min-height: 42px; padding: 9px 11px; border: 1px solid #dfe3df; outline: 0; background: #fcfcfb; font-size: 12px; }
@@ -169,3 +203,4 @@ img { display: block; max-width: 100%; }
 
 @media(max-width:1100px) { .admin-frame { grid-template-columns: 215px minmax(0,1fr); } .admin-sidebar { width: 215px; } .admin-content { padding-inline: 25px; } .admin-topbar { padding-inline: 25px; } .dashboard-columns { gap: 12px; } }
 @media(max-width:760px) { .admin-frame { display: block; } .admin-sidebar { transform: translateX(-105%); transition: transform .25s ease; box-shadow: 12px 0 35px rgba(0,0,0,.18); } .admin-sidebar.is-open { transform: translateX(0); } .admin-main { min-height: 100vh; } .admin-menu-toggle { display: grid; place-items: center; } .admin-topbar { min-height: 68px; padding-inline: 17px; } .admin-content { padding: 27px 17px 38px; } .admin-footer { padding-inline: 17px; } .admin-flash { margin-inline: 17px; } .dashboard-columns { grid-template-columns: 1fr; } .dashboard-metrics { gap: 9px; } .metric-card { min-height: 112px; padding: 16px 12px; } .metric-card strong { font-size: 29px; } .metric-card > i { top: 12px; right: 11px; font-size: 15px; } .metric-card > span { font-size: 9px; } .metric-card small { max-width: 90px; font-size: 8px; } .admin-quick-actions { align-items: flex-start; flex-direction: column; gap: 12px; } .admin-page-heading { align-items: start; flex-direction: column; } .admin-content-toolbar { align-items: start; flex-direction: column; } .admin-form-panel > form, .gallery-upload-panel > form { grid-template-columns: 1fr; padding-inline: 16px; } .admin-form-panel .form-group:has(textarea), .gallery-upload-panel .form-group:has(textarea), .form-errors, .admin-form-panel .form-group:has(input[type=checkbox]), .admin-form-panel button[type=submit], .gallery-upload-panel button[type=submit], .gallery-upload-panel .form-group:has(input[type=file]) { grid-column: 1; } .admin-panel__heading { align-items: start; flex-direction: column; gap: 7px; padding-inline: 16px; } .inquiry-detail { grid-template-columns: 1fr; margin-inline: 16px; } .inquiry-detail__message { grid-column: 1; } .login-card { padding: 30px 25px; } .login-decoration { right: 20px; bottom: 16px; } }
+@media(max-width:760px) { .gallery-filter { padding: 14px; } .gallery-filter form { align-items: stretch; flex-direction: column; } .gallery-filter select { width: 100%; min-width: 0; } .gallery-sort-panel__heading { align-items: start; flex-direction: column; padding-inline: 14px; } .gallery-sort-form { padding-inline: 14px; } .gallery-sort-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; } }

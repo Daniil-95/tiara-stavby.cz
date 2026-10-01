@@ -5,6 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 $container = require __DIR__ . '/../bootstrap.php';
 $database = $container->getByType(Nette\Database\Explorer::class);
+$passwords = $container->getByType(Nette\Security\Passwords::class);
 
 $email = strtolower(trim((string) readline('Admin email: ')));
 $name = trim((string) readline('Admin name: '));
@@ -16,7 +17,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $name === '' || strlen($passwo
 $database->table('users')->insert([
 	'name' => $name,
 	'email' => $email,
-	'password_hash' => Nette\Security\Passwords::hash($password),
+	'password_hash' => $passwords->hash($password),
 	'role' => 'admin',
 	'active' => 1,
 ]);

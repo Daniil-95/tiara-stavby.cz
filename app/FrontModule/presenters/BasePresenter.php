@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\FrontModule\presenters;
 
 use App\Model\InquiryRepository;
+use App\Model\ImageManager;
 use App\Model\NavigationRepository;
 use App\Model\PageRepository;
 use App\Model\SeoRepository;
@@ -12,6 +13,7 @@ use App\Model\ServiceRepository;
 use App\Model\SettingRepository;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
+use Nette\Utils\Random;
 
 abstract class BasePresenter extends Presenter
 {
@@ -22,6 +24,7 @@ abstract class BasePresenter extends Presenter
 	protected ServiceRepository $services;
 	protected InquiryRepository $inquiries;
 	protected SeoRepository $seo;
+	protected ImageManager $imageManager;
 
 	public function injectBase(
 		SettingRepository $settings,
@@ -30,6 +33,7 @@ abstract class BasePresenter extends Presenter
 		ServiceRepository $services,
 		InquiryRepository $inquiries,
 		SeoRepository $seo,
+		ImageManager $imageManager,
 	): void {
 		$this->settings = $settings;
 		$this->navigation = $navigation;
@@ -37,12 +41,14 @@ abstract class BasePresenter extends Presenter
 		$this->services = $services;
 		$this->inquiries = $inquiries;
 		$this->seo = $seo;
+		$this->imageManager = $imageManager;
 	}
 
 	protected function startup(): void
 	{
 		parent::startup();
-		$lang = (string) $this->getParameter('lang', 'cs');
+		$this->getSession()->start();
+		$lang = (string) ($this->getParameter('lang') ?? 'cs');
 		$this->lang = in_array($lang, ['cs', 'en'], true) ? $lang : 'cs';
 	}
 
@@ -54,6 +60,23 @@ abstract class BasePresenter extends Presenter
 		$this->template->navigationItems = $this->navigation->all($this->lang);
 		$this->template->company = $this->settings->all();
 		$this->template->labels = $this->labels();
+		$this->template->imageManager = $this->imageManager;
+		$currentPath = $this->getHttpRequest()->getUrl()->getPath();
+		$this->template->currentPath = $currentPath;
+		$activeNavigation = [];
+		foreach ($this->template->navigationItems as $item) {
+			$target = rtrim((string) $item['url'], '/') ?: '/';
+			$current = rtrim($currentPath, '/') ?: '/';
+			$activeNavigation[$item['id']] = $target === $current || (!in_array($target, ['/cs', '/en'], true) && str_starts_with($current, $target . '/'));
+		}
+		$this->template->activeNavigation = $activeNavigation;
+		$this->template->jsonLd = json_encode([
+			'@context' => 'https://schema.org', '@type' => 'GeneralContractor', 'name' => $this->settings->get('company_name', 'TIARA s.r.o.'),
+			'description' => 'Komplexní stavební práce, výstavba, rekonstrukce a modernizace.',
+			'telephone' => $this->settings->get('phone'), 'email' => $this->settings->get('email'),
+			'address' => ['@type' => 'PostalAddress', 'addressLocality' => $this->settings->get('address'), 'addressCountry' => 'CZ'],
+			'url' => 'https://tiara-stavby.cz',
+		], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 		$meta = $this->seo->forPath($path, $this->lang);
 		if ($meta) {
 			$this->template->metaTitle = $meta['meta_title'];
@@ -69,6 +92,7 @@ abstract class BasePresenter extends Presenter
 	protected function createComponentInquiryForm(): Form
 	{
 		$form = new Form;
+		$form->setHtmlAttribute('class', 'contact-form');
 		$english = $this->lang === 'en';
 		$required = $english ? 'Please fill in this field.' : 'Vyplňte prosím toto pole.';
 		$services = [];
@@ -80,11 +104,20 @@ abstract class BasePresenter extends Presenter
 		$form->addTextArea('message', $english ? 'Tell us about your project' : 'Napište nám o svém projektu')->setRequired($required)->addRule($form::MinLength, $english ? 'Message is too short.' : 'Zpráva je příliš krátká.', 10)->addRule($form::MaxLength, null, 10000);
 		$form->addCheckbox('consent', $english ? 'I agree to the processing of my personal data.' : 'Souhlasím se zpracováním osobních údajů.')->setRequired($english ? 'Please provide your consent.' : 'Pro odeslání je nutný souhlas.');
 		$form->addText('website')->setHtmlAttribute('class', 'hp-field')->setHtmlAttribute('tabindex', '-1')->setHtmlAttribute('autocomplete', 'off');
+		$submission = $this->getSession()->getSection('inquiry');
+		if (!$submission->get('submissionToken')) $submission->set('submissionToken', Random::generate(40));
+		$form->addHidden('submissionToken')->setDefaultValue((string) $submission->get('submissionToken'));
 		$form->addProtection($english ? 'The form has expired. Please try again.' : 'Formulář vypršel. Zkuste to prosím znovu.');
 		$form->addSubmit('send', $english ? 'Send inquiry' : 'Odeslat poptávku')->setHtmlAttribute('class', 'button button--gold');
 		$form->onSuccess[] = function (Form $form, \stdClass $values) use ($english): void {
 			if (trim((string) $values->website) !== '') {
-				$this->redirect('thanks', ['lang' => $this->lang]);
+				$this->redirect('Pages:thanks', ['lang' => $this->lang]);
+			}
+			$submission = $this->getSession()->getSection('inquiry');
+			$expectedToken = $submission->get('submissionToken');
+			if (!is_string($expectedToken) || !hash_equals($expectedToken, (string) $values->submissionToken)) {
+				$this->flashMessage($english ? 'Your inquiry has already been received.' : 'Vaši poptávku už jsme přijali.', 'success');
+				$this->redirect('Pages:thanks', ['lang' => $this->lang]);
 			}
 			$ip = $this->getHttpRequest()->getRemoteAddress() ?: 'unknown';
 			try {
@@ -102,9 +135,12 @@ abstract class BasePresenter extends Presenter
 					'consent' => (int) $values->consent,
 					'ip_address' => $ip,
 				]);
+				$submission->set('submissionToken', Random::generate(40));
 				$this->notifyAdmin($values);
 				$this->flashMessage($english ? 'Thank you. We will be in touch shortly.' : 'Děkujeme. Brzy se vám ozveme.', 'success');
-				$this->redirect('thanks', ['lang' => $this->lang]);
+				$this->redirect('Pages:thanks', ['lang' => $this->lang]);
+			} catch (\Nette\Application\AbortException $e) {
+				throw $e;
 			} catch (\Throwable $e) {
 				error_log('Inquiry submission failed: ' . $e->getMessage());
 				$form->addError($english ? 'We could not send your inquiry. Please try again.' : 'Poptávku se nepodařilo odeslat. Zkuste to prosím znovu.');

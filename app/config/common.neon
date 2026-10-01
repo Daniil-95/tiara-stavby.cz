@@ -1,6 +1,5 @@
 parameters:
-	appDir: %appDir%
-	wwwDir: %appDir%/../www
+	wwwDir: %rootDir%/www
 	dbHost: 127.0.0.1
 	dbName: tiara_stavby
 	dbUser: root
@@ -15,6 +14,7 @@ includes:
 services:
 	router: App\RouterFactory::createRouter
 	security.userAuthenticator: App\Security\UserAuthenticator
+	security.passwords: Nette\Security\Passwords
 	- App\Model\ProjectRepository
 	- App\Model\ServiceRepository
 	- App\Model\PageRepository
@@ -22,6 +22,9 @@ services:
 	- App\Model\SettingRepository
 	- App\Model\SeoRepository
 	- App\Model\NavigationRepository
+	- App\Model\UserRepository
+	- App\Model\LoginLogRepository
+	- App\Model\ProjectImageRepository
 	- App\Model\ImageManager
 
 database:

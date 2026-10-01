@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS projects (
 CREATE TABLE IF NOT EXISTS project_images (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   project_id INT UNSIGNED NOT NULL,
+  lang CHAR(2) NOT NULL DEFAULT 'cs',
   image_path VARCHAR(500) NOT NULL,
   title VARCHAR(220) NULL,
   alt_text VARCHAR(300) NOT NULL DEFAULT '',
@@ -86,6 +87,8 @@ CREATE TABLE IF NOT EXISTS project_images (
   active TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_project_images_order (project_id, active, sort_order),
+  UNIQUE KEY uq_project_image_path (project_id, image_path),
+  CONSTRAINT chk_project_images_lang CHECK (lang IN ('cs', 'en')),
   CONSTRAINT fk_project_images_project FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
 
@@ -111,7 +114,8 @@ CREATE TABLE IF NOT EXISTS navigation (
   url VARCHAR(255) NOT NULL,
   active TINYINT(1) NOT NULL DEFAULT 1,
   sort_order INT NOT NULL DEFAULT 0,
-  INDEX idx_navigation_order (lang, active, sort_order)
+  INDEX idx_navigation_order (lang, active, sort_order),
+  UNIQUE KEY uq_navigation_lang_url (lang, url)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
 
 CREATE TABLE IF NOT EXISTS settings (

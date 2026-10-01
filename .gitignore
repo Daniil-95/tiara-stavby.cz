@@ -1,0 +1,10 @@
+/vendor/
+/node_modules/
+/.npm-cache/
+/.agent-browser/
+/.composer-cache/
+/temp/*
+!/temp/.gitkeep
+/log/
+/www/uploads/*
+!/www/uploads/.htaccess

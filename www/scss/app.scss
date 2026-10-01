@@ -13,7 +13,7 @@ $display: 'Manrope', 'Georgia', serif;
 $body: 'DM Sans', 'Trebuchet MS', sans-serif;
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 110px; }
+html { overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 110px; }
 body { margin: 0; background: $paper; color: $navy; font-family: $body; font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
 body.menu-open { overflow: hidden; }
 img { display: block; width: 100%; height: auto; }
@@ -66,6 +66,8 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .nav-link:hover::after, .nav-link.is-active::after { transform: scaleX(1); }
 .header__cta { white-space: nowrap; }
 .menu-toggle { display: none; }
+.site-flash { position: relative; z-index: 4; padding: 12px max(24px, calc((100% - 1320px) / 2)); background: #edf4ed; color: #365c38; font-size: 12px; }
+.site-flash--error { background: #fff0ee; color: #8f3c2c; }
 
 .hero { position: relative; min-height: min(760px, calc(100svh - 124px)); overflow: hidden; background: $navy-deep; color: $white; }
 .hero__picture, .hero__picture img, .hero__scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -148,6 +150,9 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .project-grid--all { grid-template-columns: repeat(2,1fr); row-gap: 72px; }
 .project-grid--all .project-card { width: auto; margin: 0; }
 .project-grid--all .project-card__visual, .project-grid--all .project-card:nth-child(2) .project-card__visual { aspect-ratio: 1.32; }
+.project-filters { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 42px; }
+.project-filters a { padding: 9px 13px; border: 1px solid $rule; color: $steel; font-size: 9px; font-weight: 700; letter-spacing: .05em; transition: color .2s, background .2s, border-color .2s; }
+.project-filters a:hover, .project-filters a.is-active { border-color: $navy; background: $navy; color: $white; }
 
 .stats-band { padding: 78px 0; background: $graphite; color: $white; }
 .stats-band__inner { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 70px; }
@@ -179,6 +184,14 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .contact-form-wrap__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 23px; padding-bottom: 18px; border-bottom: 1px solid $rule; font-family: $display; font-size: 19px; font-weight: 600; }
 .contact-form-wrap__top i { color: $sand; }
 .contact-form { display: grid; grid-template-columns: repeat(2,1fr); gap: 15px 18px; }
+.contact-form > table, .contact-form > table > tbody { display: contents; }
+.contact-form > table > tbody > tr { display: grid; min-width: 0; grid-template-columns: minmax(0,1fr); align-content: start; gap: 6px; }
+.contact-form > table > tbody > tr:has(textarea), .contact-form > table > tbody > tr:has(select), .contact-form > table > tbody > tr:has(input[type=checkbox]), .contact-form > table > tbody > tr:has([type=submit]), .contact-form > table > tbody > tr:has(.error) { grid-column: 1 / -1; }
+.contact-form th, .contact-form td { display: block; min-width: 0; padding: 0; text-align: left; }
+.contact-form > table > tbody > tr:has(input[type=hidden]), .contact-form > table > tbody > tr:has(.hp-field) { display: none; }
+.contact-form > table > tbody > tr:has(input[type=checkbox]) td label { display: inline-flex; align-items: start; gap: 8px; }
+.contact-form > table > tbody > tr:has(input[type=checkbox]) td input { flex: 0 0 auto; margin-top: 2px; }
+.contact-form > table > tbody > tr:has([type=submit]) td { display: flex; }
 .contact-form .form-group { display: grid; gap: 6px; }
 .contact-form .form-group:has(textarea), .contact-form .form-group:has(select), .contact-form .form-group:has(input[type=checkbox]), .contact-form .form-group:has(button), .contact-form .form-errors { grid-column: 1 / -1; }
 .contact-form label { color: $graphite; font-size: 10px; font-weight: 700; letter-spacing: .05em; }
@@ -360,6 +373,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 @media (max-width: 820px) {
 	.container { width: calc(100% - 44px); }
 	.site-header, .site-header.is-scrolled { height: 76px; }
+	.site-header, .site-header.is-scrolled { backdrop-filter: none; }
 	.header__inner { gap: 18px; }
 	.brand { flex: 0 0 177px; }
 	.brand img { width: 177px; height: 53px; }
@@ -470,6 +484,8 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.benefit-list h3 { font-size: 16px; }
 	.benefit-list p { font-size: 11px; }
 	.project-grid, .project-grid--all { grid-template-columns: 1fr; row-gap: 38px; }
+	.project-filters { gap: 6px; margin-bottom: 28px; }
+	.project-filters a { padding: 8px 10px; font-size: 8px; }
 	.project-card--2 { margin-top: 0; }
 	.project-card--3 { grid-column: auto; width: auto; margin-left: 0; }
 	.project-card__visual, .project-card:nth-child(2) .project-card__visual { aspect-ratio: 1.18; }
@@ -489,6 +505,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.contact-form { grid-template-columns: 1fr; }
 	.contact-form .form-group { grid-column: 1; }
 	.contact-form .form-group:has(textarea), .contact-form .form-group:has(select), .contact-form .form-group:has(input[type=checkbox]), .contact-form .form-group:has(button), .contact-form .form-errors { grid-column: 1; }
+	.contact-form > table > tbody > tr:has(textarea), .contact-form > table > tbody > tr:has(select), .contact-form > table > tbody > tr:has(input[type=checkbox]), .contact-form > table > tbody > tr:has([type=submit]), .contact-form > table > tbody > tr:has(.error) { grid-column: 1; }
 	.footer__main { grid-template-columns: 1fr 1fr; gap: 36px 20px; padding-bottom: 40px; }
 	.footer__brand { grid-column: 1 / -1; }
 	.footer__brand p { max-width: 320px; }

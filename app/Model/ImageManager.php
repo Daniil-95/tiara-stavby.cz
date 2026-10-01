@@ -23,6 +23,7 @@ final class ImageManager
 		$mime = $upload->getContentType();
 		$extensions = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
 		if (!$info || !isset($extensions[$mime]) || $info['mime'] !== $mime) throw new \RuntimeException('Povolené jsou pouze obrázky JPG, PNG, GIF a WebP.');
+		if ((int) $info[0] > 14000 || (int) $info[1] > 14000 || (int) $info[0] * (int) $info[1] > 80_000_000) throw new \RuntimeException('Rozměry obrázku jsou příliš velké.');
 		$name = Random::generate(20) . '.' . $extensions[$mime];
 		$directory = $this->root . '/projects';
 		if (!is_dir($directory) && !mkdir($directory, 0755, true) && !is_dir($directory)) throw new \RuntimeException('Upload directory is not writable.');
@@ -30,6 +31,66 @@ final class ImageManager
 		$upload->move($target);
 		$this->createDerivatives($target, $mime, (int) $info[0], (int) $info[1]);
 		return '/uploads/projects/' . $name;
+	}
+
+	public function safeUrl(?string $path, string $fallback = '/images/project-fallback.svg'): string
+	{
+		if (!$path) return $fallback;
+		if (str_starts_with($path, '/uploads/projects/')) {
+			$name = basename($path);
+			if ($name !== $path && preg_match('/^[a-zA-Z0-9_-]+\.(?:jpg|png|gif|webp)$/i', $name) && is_file($this->root . '/projects/' . $name)) return '/uploads/projects/' . $name;
+			return $fallback;
+		}
+		if (str_starts_with($path, '/images/')) {
+			$name = basename($path);
+			if ($name !== $path && preg_match('/^[a-zA-Z0-9_-]+\.(?:svg|jpg|png|webp)$/i', $name) && is_file(dirname($this->root) . '/images/' . $name)) return '/images/' . $name;
+			return $fallback;
+		}
+		$parts = parse_url($path);
+		if (($parts['scheme'] ?? null) === 'https' && ($parts['host'] ?? null) === 'images.unsplash.com' && empty($parts['user']) && empty($parts['pass'])) return $path;
+		return $fallback;
+	}
+
+	public function srcSet(?string $path, string $fallback = '/images/project-fallback.svg'): string
+	{
+		$url = $this->safeUrl($path, $fallback);
+		$parts = parse_url($url);
+		if (($parts['host'] ?? null) === 'images.unsplash.com') {
+			$query = [];
+			parse_str($parts['query'] ?? '', $query);
+			$sources = [];
+			foreach ([480, 1200] as $width) {
+				$query['w'] = $width;
+				$sources[] = ($parts['scheme'] ?? 'https') . '://' . $parts['host'] . ($parts['path'] ?? '') . '?' . http_build_query($query, '', '&', PHP_QUERY_RFC3986) . ' ' . $width . 'w';
+			}
+			return implode(', ', $sources);
+		}
+		if (str_starts_with($url, '/uploads/projects/')) {
+			$name = basename($url);
+			$extension = pathinfo($name, PATHINFO_EXTENSION);
+			$base = substr($name, 0, -strlen($extension) - 1);
+			$sources = [];
+			foreach ([480, 1200] as $width) {
+				$variant = $base . '-' . $width . '.' . $extension;
+				$src = is_file($this->root . '/projects/' . $variant) ? '/uploads/projects/' . $variant : $url;
+				$sources[] = $src . ' ' . $width . 'w';
+			}
+			return implode(', ', $sources);
+		}
+		return $url . ' 480w, ' . $url . ' 1200w';
+	}
+
+	public function deleteProjectImage(?string $path): void
+	{
+		if (!$path || !str_starts_with($path, '/uploads/projects/')) return;
+		$name = basename($path);
+		if (!preg_match('/^[a-zA-Z0-9_-]+\.(?:jpg|png|gif|webp)$/i', $name)) return;
+		$extension = pathinfo($name, PATHINFO_EXTENSION);
+		$base = substr($name, 0, -strlen($extension) - 1);
+		foreach ([$base . '.' . $extension, $base . '-480.' . $extension, $base . '-1200.' . $extension] as $file) {
+			$target = $this->root . '/projects/' . $file;
+			if (is_file($target)) @unlink($target);
+		}
 	}
 
 	private function createDerivatives(string $path, string $mime, int $width, int $height): void

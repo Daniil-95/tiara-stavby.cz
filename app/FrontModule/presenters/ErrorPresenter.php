@@ -8,10 +8,9 @@ use Throwable;
 
 final class ErrorPresenter extends BasePresenter
 {
-	public function renderDefault(Throwable $exception): void
+	public function renderDefault(?Throwable $exception = null): void
 	{
-		$this->getHttpResponse()->setCode(404);
-		$this->template->exception = $exception;
+		$this->getHttpResponse()->setCode($exception === null || $exception instanceof \Nette\Application\BadRequestException ? 404 : 500);
 		$this->template->pageTitle = '404';
 	}
 }

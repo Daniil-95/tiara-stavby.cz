@@ -9,7 +9,7 @@ use Nette\Database\Table\Selection;
 
 final class ProjectRepository
 {
-	public function __construct(private Explorer $database) {}
+	public function __construct(private Explorer $database, private ProjectImageRepository $images) {}
 
 	public function featured(string $lang, int $limit = 6): array
 	{
@@ -31,7 +31,7 @@ final class ProjectRepository
 
 	public function gallery(int $projectId): array
 	{
-		return $this->database->table('project_images')->where('project_id', $projectId)->where('active', 1)->order('sort_order ASC, id ASC')->fetchAll();
+		return $this->images->activeForProject($projectId);
 	}
 
 	public function adminRows(): array
