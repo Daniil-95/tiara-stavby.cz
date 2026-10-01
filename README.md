@@ -1,56 +1,37 @@
-# TIARA s.r.o. — stavební práce
+# TIARA s.r.o. — webové stránky stavební společnosti
 
-Český web s veřejnou prezentací, MySQL obsahem a administrační částí na Nette Framework 3.2 + Latte 3. Vyžaduje PHP 8.2+, MySQL 8+, Composer a Node.js.
+## O projektu
 
-## Instalace
+Web představuje společnost TIARA s.r.o., která se zaměřuje na výstavbu, rekonstrukce a modernizace rodinných domů i komerčních prostor. Zákazníci zde najdou nabídku služeb, ukázky dokončených realizací a kontaktní formulář pro nezávaznou poptávku.
 
-1. Vytvořte databázi a naimportujte migrace v číselném pořadí:
+Součástí projektu je neveřejná správa obsahu. Oprávněný správce v ní může upravovat stránky, služby, realizace, fotografie, kontaktní údaje a navigaci. Může také prohlížet poptávky a měnit jejich stav.
 
-   ```sh
-   mysql --default-character-set=utf8mb4 -u root -p < db/001_initial_schema.sql
-   mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/002_seed_content.sql
-   mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/003_project_categories.sql
-   mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/004_seed_project_galleries.sql
-   mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/005_content_language_constraints.sql
-   mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/006_czech_routes.sql
-   mysql --default-character-set=utf8mb4 -u root -p < db/007_remove_references.sql
-   ```
+## Technologie
 
-2. Установите PHP-зависимости и задайте доступ к MySQL в `app/config/local.neon` (не размещайте реальные секреты в Git):
+Projekt používá PHP 8.2, Nette Framework 3.2, šablony Latte 3 a databázi MySQL 8. Pro tvorbu stylů slouží Sass a Node.js.
+
+## Místní spuštění
+
+1. Nainstalujte PHP 8.2 nebo novější, MySQL 8, Composer a Node.js. PHP musí mít zapnutá rozšíření `fileinfo`, `gd`, `mbstring`, `pdo` a `pdo_mysql`.
+2. Nastavte připojení k databázi v `app/config/local.neon`. Tento soubor obsahuje místní údaje, které nepatří do verzovacího systému.
+3. Spusťte SQL soubory z adresáře `db/` postupně od `001_initial_schema.sql` do `007_remove_references.sql`. První soubor vytvoří databázi `tiara_stavby`.
+4. Nainstalujte závislosti, sestavte styly a vytvořte účet správce:
 
    ```sh
    composer install
-   ```
-
-3. Соберите стили и создайте администратора:
-
-   ```sh
    npm install
    npm run build:css
    php bin/create-admin.php
    ```
 
-4. Настройте Apache VirtualHost с `DocumentRoot` на `www/`, включите `mod_rewrite` и разрешите `.htaccess`. Для локального просмотра можно запустить:
+   Skript pro vytvoření účtu si vyžádá jméno, e-mail a heslo.
+
+5. Spusťte místní web:
 
    ```sh
    php -d upload_max_filesize=8M -d post_max_size=10M -S 127.0.0.1:8000 -t www www/router.php
    ```
 
-   Затем откройте `http://127.0.0.1:8000/`, сайт доступен только на чешском языке; вход в админку: `/admin/login`.
+   Veřejný web bude dostupný na `http://127.0.0.1:8000/`, správa obsahu na `http://127.0.0.1:8000/admin/login`.
 
-   Для локальной отладки задайте `APP_ENV=development`. На публичном сервере задайте `APP_ENV=production`; без явного `development` подробный режим ошибок выключен.
-
-## Структура
-
-- `app/FrontModule` — публичные presenters и Latte-шаблоны.
-- `app/AdminModule` — вход и CMS для страниц, услуг, проектов, заявок и настроек.
-- `app/Model` — репозитории, изображения и доступ к базе.
-- `app/Security` — Nette authenticator и журнал входов.
-- `db/` — SQL-схема и последовательные миграции.
-- `www/` — публичный document root, стили, скрипты и загружаемые изображения.
-
-Загруженные фотографии проектов хранятся в `www/uploads/projects`. На сервере этот каталог должен быть доступен на запись PHP-процессу. Создавайте резервные копии базы и каталога uploads.
-
-Для Apache и PHP-FPM задайте `upload_max_filesize=8M` и `post_max_size=10M` в конфигурации PHP, чтобы загрузка изображений до 8 MB проходила через веб-сервер.
-
-Перед публикацией замените примерные телефон, адрес, IČO/DIČ и адреса электронной почты в админке на фактические данные компании. Настройте PHP `mail()` или SMTP relay: без почтового транспорта заявки будут сохраняться в базе, но email-уведомление не отправится.
+Fotografie realizací se ukládají do `www/uploads/projects`. Při nasazení na server musí mít PHP právo do tohoto adresáře zapisovat. Před zveřejněním doplňte skutečné firemní kontakty a nastavte odesílání e-mailů; bez něj se poptávky uloží do databáze, ale nepřijde e-mailové upozornění.
