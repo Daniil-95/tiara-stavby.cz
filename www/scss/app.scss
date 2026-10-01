@@ -332,18 +332,6 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .project-cta > .container { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
 .project-cta h2 { margin: 0; font-size: clamp(44px,5.6vw,70px); }
 .project-cta h2 em { color: $sand-light; }
-.reference-gallery__grid { display: grid; grid-template-columns: repeat(12,1fr); grid-auto-rows: 80px; gap: 18px; }
-.reference-tile { position: relative; grid-column: span 5; grid-row: span 5; overflow: hidden; background: #d9dad6; }
-.reference-tile--2 { grid-column: span 7; grid-row: span 4; }
-.reference-tile--3 { grid-column: span 6; grid-row: span 5; }
-.reference-tile--4 { grid-column: span 6; grid-row: span 4; }
-.reference-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
-.reference-tile:hover img { transform: scale(1.045); }
-.reference-tile::after { position: absolute; inset: 35% 0 0; background: linear-gradient(0deg,rgba(12,28,39,.82),transparent); content: ''; }
-.reference-tile__caption { position: absolute; z-index: 1; right: 28px; bottom: 26px; left: 28px; display: grid; color: $white; }
-.reference-tile__caption small { margin-bottom: 6px; color: $sand-light; font-size: 9px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-.reference-tile__caption strong { font-family: $display; font-size: 22px; }
-.reference-tile__arrow { position: absolute; z-index: 1; top: 0; right: 0; display: grid; width: 48px; height: 48px; place-items: center; background: $sand; color: $navy; }
 .contact-page__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 92px; }
 .contact-page__details h2 { margin-bottom: 30px; font-size: clamp(43px,5vw,64px); }
 .contact-details--large { margin-top: 0; }
@@ -586,13 +574,6 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.project-gallery__item--1 { grid-row: span 2; }
 	.project-cta > .container { align-items: start; flex-direction: column; }
 	.project-cta h2 { font-size: 47px; }
-	.reference-gallery__grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 70px; gap: 10px; }
-	.reference-tile, .reference-tile--2, .reference-tile--3, .reference-tile--4 { grid-column: span 1; grid-row: span 3; }
-	.reference-tile:nth-child(3n+1) { grid-row: span 4; }
-	.reference-tile__caption { right: 11px; bottom: 12px; left: 12px; }
-	.reference-tile__caption strong { font-size: 15px; }
-	.reference-tile__caption small { font-size: 7px; }
-	.reference-tile__arrow { width: 34px; height: 34px; font-size: 11px; }
 	.contact-page__details h2 { font-size: 47px; }
 	.contact-details--large { gap: 16px; }
 	.thank-you { min-height: 590px; }

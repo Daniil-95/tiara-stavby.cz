@@ -13,6 +13,7 @@
    mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/004_seed_project_galleries.sql
    mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/005_content_language_constraints.sql
    mysql --default-character-set=utf8mb4 -u root -p tiara_stavby < db/006_czech_routes.sql
+   mysql --default-character-set=utf8mb4 -u root -p < db/007_remove_references.sql
    ```
 
 2. Установите PHP-зависимости и задайте доступ к MySQL в `app/config/local.neon` (не размещайте реальные секреты в Git):

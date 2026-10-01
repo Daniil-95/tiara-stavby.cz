@@ -34,7 +34,7 @@ INSERT INTO page_sections (section_key,lang,title,subtitle,content,image_path,ac
 ON DUPLICATE KEY UPDATE title=VALUES(title), subtitle=VALUES(subtitle), content=VALUES(content), image_path=VALUES(image_path), active=VALUES(active), sort_order=VALUES(sort_order);
 
 INSERT INTO navigation (lang,title,url,active,sort_order) VALUES
-('cs','Domů','/',1,1),('cs','O nás','/o-nas',1,2),('cs','Služby','/sluzby',1,3),('cs','Realizace','/realizace',1,4),('cs','Reference','/reference',1,5),('cs','Kontakt','/kontakt',1,6)
+('cs','Domů','/',1,1),('cs','O nás','/o-nas',1,2),('cs','Služby','/sluzby',1,3),('cs','Realizace','/realizace',1,4),('cs','Kontakt','/kontakt',1,5)
 ON DUPLICATE KEY UPDATE title=VALUES(title), active=VALUES(active), sort_order=VALUES(sort_order);
 
 INSERT INTO seo_metadata (page_path,lang,meta_title,meta_description,og_title,og_description,robots) VALUES
@@ -45,6 +45,5 @@ INSERT INTO seo_metadata (page_path,lang,meta_title,meta_description,og_title,og
 ('/o-nas','cs','O nás | TIARA s.r.o.','Poznejte stavební společnost TIARA s.r.o. a náš přístup k výstavbě, rekonstrukcím a modernizacím.','Spolehlivý stavební partner','Od první konzultace po předání hotového díla.','index,follow'),
 ('/sluzby','cs','Stavební služby | TIARA s.r.o.','Výstavba rodinných domů, rekonstrukce bytů a modernizace nemovitostí.','Komplexní stavební práce','Jeden partner pro váš stavební projekt.','index,follow'),
 ('/realizace','cs','Realizované projekty | TIARA s.r.o.','Prohlédněte si vybrané stavby, rekonstrukce a modernizace realizované společností TIARA.','Realizace TIARA s.r.o.','Stavby s péčí o každý detail.','index,follow'),
-('/reference','cs','Reference | TIARA s.r.o.','Galerie stavebních realizací TIARA s.r.o.','Naše reference','Domovy a místa pro práci, proměněná s péčí.','index,follow'),
 ('/kontakt','cs','Kontakt | TIARA s.r.o.','Plánujete stavbu nebo rekonstrukci? Kontaktujte TIARA s.r.o. a probereme váš projekt.','Kontaktujte TIARA s.r.o.','Úvodní konzultace bez závazků.','index,follow')
 ON DUPLICATE KEY UPDATE meta_title=VALUES(meta_title), meta_description=VALUES(meta_description), og_title=VALUES(og_title), og_description=VALUES(og_description), robots=VALUES(robots);

@@ -20,7 +20,7 @@ final class SiteEditorPresenter extends BasePresenter
 	];
 	private const SEO_PAGES = [
 		'/' => 'Úvodní stránka', '/o-nas' => 'O nás', '/sluzby' => 'Služby',
-		'/realizace' => 'Realizace', '/reference' => 'Reference', '/kontakt' => 'Kontakt',
+		'/realizace' => 'Realizace', '/kontakt' => 'Kontakt',
 	];
 
 	private string $page = 'home';

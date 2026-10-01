@@ -18,7 +18,7 @@ final class RouterFactory
 		$router->addRoute('admin/<section>[/<operation>[/<id \\d+>]]', 'Admin:Content:default');
 		$router->addRoute('sitemap.xml', 'Front:Sitemap:default');
 		$router->addRoute('', 'Front:Home:default');
-		foreach (['o-nas' => 'about', 'sluzby' => 'services', 'realizace' => 'projects', 'reference' => 'gallery', 'kontakt' => 'contact', 'dekujeme' => 'thanks'] as $path => $action) {
+		foreach (['o-nas' => 'about', 'sluzby' => 'services', 'realizace' => 'projects', 'kontakt' => 'contact', 'dekujeme' => 'thanks'] as $path => $action) {
 			$router->addRoute($path, ['module' => 'Front', 'presenter' => 'Pages', 'action' => $action]);
 		}
 		$router->addRoute('sluzby/<slug>', 'Front:Pages:service');

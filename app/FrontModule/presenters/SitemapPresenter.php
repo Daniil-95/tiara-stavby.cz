@@ -17,7 +17,7 @@ final class SitemapPresenter extends Presenter
 	{
 		$baseUrl = $this->getHttpRequest()->getUrl()->getHostUrl();
 		$urls = [];
-		foreach (['/', '/o-nas', '/sluzby', '/realizace', '/reference', '/kontakt'] as $path) $urls[] = $path;
+		foreach (['/', '/o-nas', '/sluzby', '/realizace', '/kontakt'] as $path) $urls[] = $path;
 		foreach ($this->services->all('cs') as $service) $urls[] = '/sluzby/' . rawurlencode($service['slug']);
 		foreach ($this->projects->all('cs') as $project) $urls[] = '/realizace/' . (int) $project['id'];
 		$body = '<?xml version="1.0" encoding="UTF-8"?>' . "\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";

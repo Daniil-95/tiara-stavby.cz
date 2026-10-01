@@ -158,7 +158,7 @@ abstract class BasePresenter extends Presenter
 	private function labels(): array
 	{
 		return [
-			'home' => 'Domů', 'about' => 'O nás', 'services' => 'Služby', 'projects' => 'Realizace', 'references' => 'Reference', 'contact' => 'Kontakt',
+			'home' => 'Domů', 'about' => 'O nás', 'services' => 'Služby', 'projects' => 'Realizace', 'contact' => 'Kontakt',
 			'quote' => 'Nezávazná poptávka', 'more' => 'Zjistit více', 'allProjects' => 'Všechny realizace', 'allServices' => 'Naše služby', 'contactUs' => 'Kontaktujte nás', 'phone' => 'Telefon', 'email' => 'E-mail', 'address' => 'Adresa', 'hours' => 'Pracovní doba', 'send' => 'Odeslat poptávku', 'location' => 'Lokalita', 'year' => 'Rok', 'category' => 'Kategorie', 'back' => 'Zpět na realizace', 'step' => 'Pojďme probrat váš projekt',
 		];
 	}
