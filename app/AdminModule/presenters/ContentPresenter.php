@@ -28,7 +28,9 @@ final class ContentPresenter extends BasePresenter
 		$this->section = ['project' => 'projects', 'service' => 'services', 'page' => 'pages', 'inquiry' => 'inquiries', 'setting' => 'settings', 'navigation' => 'navigation'][$routeSection] ?? $routeSection;
 		if (!isset(self::TABLES[$this->section])) $this->error('Section not found.', 404);
 		$id = (int) ($this->getParameter('id') ?? 0);
-		$row = $id ? $this->database->table(self::TABLES[$this->section])->get($id) : null;
+		$selection = $this->database->table(self::TABLES[$this->section]);
+		if (in_array($this->section, ['projects', 'services', 'pages', 'navigation', 'seo', 'gallery'], true)) $selection->where('lang', 'cs');
+		$row = $id ? $selection->get($id) : null;
 		$this->entry = $row ? $row->toArray() : null;
 		if ($id && !$this->entry) $this->error('Entry not found.', 404);
 	}

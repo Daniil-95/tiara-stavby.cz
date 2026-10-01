@@ -26,6 +26,7 @@ abstract class BasePresenter extends Presenter
 	protected function createComponentLogoutForm(): Form
 	{
 		$form = new Form;
+		$form->setAction($this->getHttpRequest()->getUrl()->getPath());
 		$form->setHtmlAttribute('class', 'admin-logout-form');
 		$form->addProtection('Platnost odhlášení vypršela. Obnovte stránku.');
 		$form->addSubmit('logout', 'Odhlásit se')->setHtmlAttribute('class', 'admin-logout-button');

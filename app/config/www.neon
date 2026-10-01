@@ -2,7 +2,7 @@ parameters:
 	production: false
 
 application:
-	errorPresenter: Front:Error:default
+	errorPresenter: Front:Error
 	mapping:
 		*: 'App\*Module\presenters\*Presenter'
 

@@ -12,10 +12,12 @@ final class DashboardPresenter extends BasePresenter
 
 	public function renderDefault(): void
 	{
-		$this->template->projectCount = $this->database->table('projects')->where('active', 1)->count('*');
-		$this->template->serviceCount = $this->database->table('services')->where('active', 1)->count('*');
+		$weekdays = [1 => 'PONDĚLÍ', 'ÚTERÝ', 'STŘEDA', 'ČTVRTEK', 'PÁTEK', 'SOBOTA', 'NEDĚLE'];
+		$this->template->weekday = $weekdays[(int) date('N')];
+		$this->template->projectCount = $this->database->table('projects')->where('lang', 'cs')->where('active', 1)->count('*');
+		$this->template->serviceCount = $this->database->table('services')->where('lang', 'cs')->where('active', 1)->count('*');
 		$this->template->newInquiries = $this->database->table('inquiries')->where('status', 'new')->count('*');
-		$this->template->latestProjects = $this->database->table('projects')->order('created_at DESC')->limit(5)->fetchAll();
+		$this->template->latestProjects = $this->database->table('projects')->where('lang', 'cs')->order('created_at DESC')->limit(5)->fetchAll();
 		$this->template->latestInquiries = $this->database->table('inquiries')->order('created_at DESC')->limit(5)->fetchAll();
 	}
 

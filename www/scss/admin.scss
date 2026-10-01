@@ -170,7 +170,7 @@ img { display: block; max-width: 100%; }
 .gallery-sort-card { min-width: 0; padding: 8px; border: 1px solid $line; background: #fff; cursor: grab; transition: border-color .2s, opacity .2s, transform .2s; }
 .gallery-sort-card:hover { border-color: $sand; }
 .gallery-sort-card.is-dragging { opacity: .42; transform: scale(.98); }
-.gallery-sort-card__handle { display: flex; align-items: center; gap: 7px; margin: 2px 0 8px; color: $muted; font-size: 7px; font-weight: 700; letter-spacing: .1em; }
+.gallery-sort-card__handle { display: flex; align-items: center; gap: 7px; margin: 2px 0 8px; color: $muted; font-size: 7px; font-weight: 700; letter-spacing: .1em; touch-action: none; user-select: none; -webkit-user-select: none; }
 .gallery-sort-card__handle i { color: $sand; }
 .gallery-sort-card > img { width: 100%; aspect-ratio: 1.35; object-fit: cover; background: $paper; }
 .gallery-sort-card > strong, .gallery-sort-card > small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
