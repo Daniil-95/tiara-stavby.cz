@@ -33,7 +33,7 @@
 				{foreach $navigationItems as $item}{var $isActive = $activeNavigation[$item['id']] ?? false}<a href="{$item['url']}" class="nav-link {if $isActive}is-active{/if}" {if $isActive}aria-current="page"{/if}>{$item['title']}</a>{/foreach}
 				<a href="/admin" class="nav-link nav-link--admin"><i class="fa-solid fa-right-to-bracket"></i> Administrace</a>
 			</nav>
-			<a class="button button--small button--navy header__cta" href="/kontakt">Nezávazná poptávka<i class="fa-solid fa-arrow-right"></i></a>
+			<a class="button button--small button--navy header__cta" href="/kontakt" aria-label="Nezávazná poptávka"><span>Nezávazná poptávka</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
 		</div>
 	</header>
 	{foreach $flashes as $flash}<div class="site-flash site-flash--{$flash->type}" role="status">{$flash->message}</div>{/foreach}

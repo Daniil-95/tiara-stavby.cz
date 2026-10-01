@@ -15,6 +15,14 @@
       navigation.classList.remove('is-open');
       document.body.classList.remove('menu-open');
     }));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+        menuButton.setAttribute('aria-expanded', 'false');
+        navigation.classList.remove('is-open');
+        document.body.classList.remove('menu-open');
+        menuButton.focus();
+      }
+    });
   }
 
   const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 30);
