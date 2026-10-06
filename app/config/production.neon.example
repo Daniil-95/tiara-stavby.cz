@@ -1,0 +1,9 @@
+# Copy this file to production.neon on the hosting and replace every value.
+# Keep production.neon outside version control.
+parameters:
+	dbHost: 127.0.0.1
+	dbName: replace_with_production_database
+	dbUser: replace_with_restricted_database_user
+	dbPassword: replace_with_strong_database_password
+	adminEmail: info@tiara-stavby.cz
+	baseUrl: https://tiara-stavby.cz

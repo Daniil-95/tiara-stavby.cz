@@ -8,3 +8,4 @@
 /log/
 /www/uploads/*
 !/www/uploads/.htaccess
+/app/config/production.neon

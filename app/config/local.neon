@@ -1,4 +1,4 @@
-# Local-only values. Override these for your MySQL installation.
+# Local-only fallback values. Production values are supplied through environment variables.
 parameters:
 	dbHost: 127.0.0.1
 	dbName: tiara_stavby

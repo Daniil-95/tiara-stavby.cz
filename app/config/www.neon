@@ -16,7 +16,7 @@ session:
 	autoStart: smart
 
 http:
-	cookieSecure: auto
+	cookieSecure: %cookieSecure%
 	headers:
 		X-Frame-Options: SAMEORIGIN
 		X-Content-Type-Options: nosniff
