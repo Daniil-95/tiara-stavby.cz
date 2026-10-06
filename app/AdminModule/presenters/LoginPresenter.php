@@ -18,10 +18,10 @@ final class LoginPresenter extends Presenter
 	protected function createComponentLoginForm(): Form
 	{
 		$form = new Form;
-		$form->addEmail('email', 'E-mail')->setRequired('Zadejte e-mail.');
+		$form->addEmail('email', 'E-mail')->setRequired('Zadejte e-mail.')->setHtmlAttribute('autofocus', true);
 		$form->addPassword('password', 'Heslo')->setRequired('Zadejte heslo.');
 		$form->addProtection('Formulář vypršel. Obnovte stránku a zkuste to znovu.');
-		$form->addSubmit('send', 'Přihlásit se')->setHtmlAttribute('class', 'admin-button');
+		$form->addSubmit('send', 'Přihlásit se')->setHtmlAttribute('class', 'login-submit');
 		$form->onSuccess[] = function (Form $form, \stdClass $values): void {
 			try {
 				$this->getUser()->login($values->email, $values->password);

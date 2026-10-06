@@ -1,75 +1,50 @@
 (() => {
-  document.querySelectorAll('[data-preview-target]').forEach((input) => {
+  const bindPreview = (input) => {
     input.addEventListener('change', () => {
       const file = input.files?.[0];
-      const preview = document.getElementById(input.dataset.previewTarget);
-      if (!file || !preview) return;
+      if (!file) return;
+      const field = input.closest('.editor-field');
+      let preview = input.dataset.previewTarget ? document.getElementById(input.dataset.previewTarget) : field?.querySelector('img');
+      if (!preview && field) {
+        preview = document.createElement('img');
+        preview.className = 'admin-current-image';
+        preview.alt = 'Náhled nové fotografie';
+        input.after(preview);
+      }
+      if (!preview) return;
       if (preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
       preview.dataset.objectUrl = URL.createObjectURL(file);
       preview.src = preview.dataset.objectUrl;
     });
-  });
+  };
+  document.querySelectorAll('input[type=file]').forEach(bindPreview);
+
+  const seoSelect = document.querySelector('select[name=seo_path]');
+  if (seoSelect) {
+    const form = seoSelect.form;
+    let dirty = false;
+    form.addEventListener('input', () => { dirty = true; });
+    seoSelect.addEventListener('change', () => {
+      if (dirty && !window.confirm('Neuložené změny budou ztraceny. Pokračovat?')) {
+        seoSelect.value = new URLSearchParams(location.search).get('path') || '/';
+        return;
+      }
+      location.href = '/admin/editor/seo?path=' + encodeURIComponent(seoSelect.value);
+    });
+  }
 
   const button = document.querySelector('.admin-menu-toggle');
   const sidebar = document.querySelector('.admin-sidebar');
+  const backdrop = document.querySelector('.admin-backdrop');
   if (!button || !sidebar) return;
-  button.addEventListener('click', () => {
-    const opened = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!opened));
-    sidebar.classList.toggle('is-open', !opened);
-  });
-
-  const sortable = document.querySelector('[data-sortable-gallery]');
-  const orderField = document.querySelector('input[name="order"]');
-  if (sortable && orderField) {
-    let dragged = null;
-    let touchPointerId = null;
-    const cards = () => Array.from(sortable.querySelectorAll('[data-sort-item]'));
-    const syncOrder = () => { orderField.value = cards().map((card) => card.dataset.sortItem).join(','); };
-    const moveCard = (target, clientY) => {
-      if (!dragged || !target || dragged === target) return;
-      const box = target.getBoundingClientRect();
-      const after = clientY > box.top + box.height / 2;
-      sortable.insertBefore(dragged, after ? target.nextSibling : target);
-    };
-
-    sortable.addEventListener('pointerdown', (event) => {
-      if (event.pointerType !== 'touch' || !event.target.closest('.gallery-sort-card__handle')) return;
-      dragged = event.target.closest('[data-sort-item]');
-      if (!dragged) return;
-      touchPointerId = event.pointerId;
-      dragged.classList.add('is-dragging');
-      event.preventDefault();
-    });
-    sortable.addEventListener('pointermove', (event) => {
-      if (event.pointerId !== touchPointerId || !dragged) return;
-      moveCard(document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-sort-item]'), event.clientY);
-    });
-    const finishTouchDrag = (event) => {
-      if (event.pointerId !== touchPointerId) return;
-      dragged?.classList.remove('is-dragging');
-      dragged = null;
-      touchPointerId = null;
-      syncOrder();
-    };
-    sortable.addEventListener('pointerup', finishTouchDrag);
-    sortable.addEventListener('pointercancel', finishTouchDrag);
-
-    sortable.addEventListener('dragstart', (event) => {
-      dragged = event.target.closest('[data-sort-item]');
-      if (!dragged) return;
-      dragged.classList.add('is-dragging');
-      event.dataTransfer.effectAllowed = 'move';
-    });
-    sortable.addEventListener('dragend', () => {
-      dragged?.classList.remove('is-dragging');
-      dragged = null;
-      syncOrder();
-    });
-    sortable.addEventListener('dragover', (event) => {
-      event.preventDefault();
-      moveCard(event.target.closest('[data-sort-item]'), event.clientY);
-    });
-    sortable.addEventListener('drop', (event) => { event.preventDefault(); syncOrder(); });
-  }
+  const setOpen = (open) => {
+    button.setAttribute('aria-expanded', String(open));
+    sidebar.classList.toggle('is-open', open);
+    document.body.classList.toggle('admin-menu-open', open);
+    if (backdrop) backdrop.hidden = !open;
+  };
+  button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+  backdrop?.addEventListener('click', () => setOpen(false));
+  sidebar.addEventListener('click', (event) => { if (event.target.closest('a')) setOpen(false); });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setOpen(false); });
 })();
