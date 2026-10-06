@@ -2,6 +2,7 @@
   "name": "tiara/stavby",
   "description": "Czech construction company website and CMS for TIARA s.r.o.",
   "type": "project",
+  "license": "proprietary",
   "require": {
     "php": ">=8.2",
     "ext-fileinfo": "*",

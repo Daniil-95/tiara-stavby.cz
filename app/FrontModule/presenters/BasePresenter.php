@@ -157,7 +157,9 @@ abstract class BasePresenter extends Presenter
 		$subject = mb_encode_mimeheader('Nová poptávka z webu TIARA', 'UTF-8');
 		$message = "Jméno: {$values->name}\nE-mail: {$values->email}\nTelefon: {$values->phone}\nSlužba: {$values->service}\n\n{$values->message}";
 		$headers = 'From: web@tiara-stavby.cz' . "\r\n" . 'Reply-To: ' . str_replace(["\r", "\n"], '', $values->email) . "\r\n" . 'Content-Type: text/plain; charset=UTF-8';
-		@mail($to, $subject, $message, $headers);
+		if (!@mail($to, $subject, $message, $headers)) {
+			error_log('Inquiry notification email could not be sent to: ' . $to);
+		}
 	}
 
 	private function labels(): array
