@@ -46,7 +46,7 @@
 		<section class="editor-group"><header><span>01</span><div><h2>Údaje společnosti</h2><p>Identifikační údaje a e-mail pro administraci.</p></div></header><div class="editor-fields editor-fields--two">
 			<div class="editor-field editor-field--wide"><label>{label company_name /}</label>{input company_name}</div><div class="editor-field"><label>{label ico /}</label>{input ico}</div><div class="editor-field"><label>{label dic /}</label>{input dic}</div><div class="editor-field editor-field--wide"><label>{label admin_email /}</label>{input admin_email}</div>
 		</div></section>
-		<section class="editor-group"><header><span>02</span><div><h2>Sociální sítě</h2><p>Veřejné profily společnosti.</p></div></header><div class="editor-fields editor-fields--two">
+		<section class="editor-group"><header><span>02</span><div><h2>Sociální sítě a tlačítko</h2><p>Veřejné profily a hlavní tlačítko v horní části webu.</p></div></header><div class="editor-fields editor-fields--two">
 			<div class="editor-field"><label>{label facebook /}</label>{input facebook}</div><div class="editor-field"><label>{label instagram /}</label>{input instagram}</div>			<div class="editor-field"><label>{label linkedin /}</label>{input linkedin}</div>
 			<div class="editor-field"><label>{label header_cta_label /}</label>{input header_cta_label}</div><div class="editor-field"><label>{label header_cta_url /}</label>{input header_cta_url}</div>
 		</div></section>
@@ -56,7 +56,6 @@
 			<div class="editor-field"><label>{label email /}</label>{input email}</div><div class="editor-field"><label>{label address /}</label>{input address}</div>
 			<div class="editor-field"><label>{label hours /}</label>{input hours}</div><div class="editor-field"><label>{label google_maps_url /}</label>{input google_maps_url}</div>
 		</div></section>
-		<section class="editor-group"><header><span>02</span><div><h2>Upozornění na poptávky</h2><p>Na tento e-mail chodí oznámení z kontaktního formuláře.</p></div></header><div class="editor-fields"><div class="editor-field"><label>{label admin_email /}</label>{input admin_email}</div></div></section>
 		{/if}
 		{foreach $form->getErrors() as $editorError}<p class="form-errors" role="alert">{$editorError}</p>{/foreach}<div class="site-editor-savebar">{input save}</div>
 	{/form}

@@ -147,12 +147,12 @@ final class SiteEditorPresenter extends BasePresenter
 			$form->addSelect('seo_path', 'Stránka', self::SEO_PAGES)->setRequired();
 			$form->addText('meta_title', 'Název ve vyhledávání');
 			$form->addTextArea('meta_description', 'Popis pro vyhledávače');
-			$form->addTextArea('keywords', 'Klíčová slova');
-			$form->addText('canonical_url', 'Kanonická adresa URL');
+			$form->addTextArea('keywords', 'Klíčová slova (nepovinné)');
+			$form->addText('canonical_url', 'Kanonická URL (nepovinné)');
 			$form->addText('og_title', 'Název při sdílení');
 			$form->addTextArea('og_description', 'Popis při sdílení');
-			$form->addText('og_image', 'Obrázek při sdílení (URL)');
-			$form->addText('robots', 'Indexování stránky');
+			$form->addText('og_image', 'Obrázek při sdílení (URL, nepovinné)');
+			$form->addText('robots', 'Pravidla pro vyhledávače (robots)');
 			return;
 		}
 		if ($this->page === 'settings') {
@@ -171,7 +171,6 @@ final class SiteEditorPresenter extends BasePresenter
 		$form->addText('address', 'Adresa')->setRequired();
 		$form->addText('hours', 'Otevírací doba');
 			$form->addText('google_maps_url', 'Odkaz na mapu');
-		$form->addEmail('admin_email', 'E-mail pro upozornění na poptávky')->setRequired();
 	}
 
 	private function loadData(): array
@@ -216,7 +215,6 @@ final class SiteEditorPresenter extends BasePresenter
 		}
 		if ($this->page === 'settings') return [
 			'company_name' => $this->setting('company_name', 'TIARA s.r.o.'),
-			'admin_email' => $this->setting('admin_email', 'info@tiara-stavby.cz'),
 			'ico' => $this->setting('ico', ''), 'dic' => $this->setting('dic', ''),
 			'facebook' => $this->setting('facebook', ''), 'instagram' => $this->setting('instagram', ''),
 			'linkedin' => $this->setting('linkedin', ''),
@@ -286,7 +284,6 @@ final class SiteEditorPresenter extends BasePresenter
 		$this->saveSettings([
 			'company_name' => $data['company_name'], 'phone' => $data['phone'], 'email' => $data['email'],
 			'address' => $data['address'], 'hours' => $data['hours'], 'google_maps_url' => $data['google_maps_url'],
-			'admin_email' => $data['admin_email'],
 		], 'contact');
 	}
 
