@@ -12,9 +12,9 @@ use Nette\Utils\Strings;
 
 final class ContentPresenter extends BasePresenter
 {
-	private const TABLES = ['project' => 'projects', 'service' => 'services', 'inquiry' => 'inquiries', 'navigation' => 'navigation'];
+	private const TABLES = ['project' => 'projects', 'service' => 'services', 'faq' => 'faqs', 'inquiry' => 'inquiries', 'navigation' => 'navigation'];
 	private const ALIASES = ['projects' => 'project', 'services' => 'service', 'inquiries' => 'inquiry'];
-	private const TITLES = ['project' => 'Realizace', 'service' => 'Služby', 'inquiry' => 'Poptávky', 'navigation' => 'Navigace'];
+	private const TITLES = ['project' => 'Realizace', 'service' => 'Služby', 'faq' => 'Časté otázky', 'inquiry' => 'Poptávky', 'navigation' => 'Navigace'];
 	private const MAX_IMAGE_SIZE = 8 * 1024 * 1024;
 
 	private string $section = 'project';
@@ -183,6 +183,12 @@ final class ContentPresenter extends BasePresenter
 				$order();
 				$form->addCheckbox('active', 'Zobrazit na webu')->setDefaultValue(true);
 				break;
+			case 'faq':
+				$form->addText('question', 'Otázka')->setRequired('Zadejte otázku.')->addRule($form::MaxLength, 'Otázka může mít nejvýše 500 znaků.', 500);
+				$form->addTextArea('answer', 'Odpověď')->setRequired('Zadejte odpověď.');
+				$order();
+				$form->addCheckbox('active', 'Zobrazit na webu')->setDefaultValue(true);
+				break;
 			case 'navigation':
 				$form->addText('title', 'Název')->setRequired('Zadejte název.')->addRule($form::MaxLength, 'Název je příliš dlouhý.', 120);
 				$form->addText('url', 'Odkaz (např. /sluzby)')->setRequired('Zadejte odkaz.')->addRule($form::MaxLength, 'Odkaz je příliš dlouhý.', 255);
@@ -217,7 +223,7 @@ final class ContentPresenter extends BasePresenter
 			$selection->order('created_at DESC');
 			$status = $this->getParameter('status');
 			if (in_array($status, ['new', 'contacted', 'closed'], true)) $selection->where('status', $status);
-		} elseif ($this->section === 'navigation' || $this->section === 'service') {
+		} elseif ($this->section === 'navigation' || $this->section === 'service' || $this->section === 'faq') {
 			$selection->order('sort_order ASC, id ASC');
 		} else {
 			$selection->order('sort_order ASC, id DESC');

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\FrontModule\presenters;
 
 use App\Model\ProjectRepository;
+use App\Model\FaqRepository;
 
 final class PagesPresenter extends BasePresenter
 {
-	public function __construct(private ProjectRepository $projects) { parent::__construct(); }
+	public function __construct(private ProjectRepository $projects, private FaqRepository $faqs) { parent::__construct(); }
 
 	public function renderAbout(): void
 	{
@@ -27,6 +28,7 @@ final class PagesPresenter extends BasePresenter
 		$service = $this->services->findBySlug($slug, 'cs');
 		if (!$service) $this->error('Service not found.');
 		$this->template->service = $service;
+		$this->template->faqs = $this->faqs->all('cs');
 	}
 
 	public function renderProjects(?string $category = null): void

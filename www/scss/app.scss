@@ -318,6 +318,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .back-link { margin-bottom: 54px; color: rgba($white,.75); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .back-link i { margin-right: 8px; color: $sand-light; }
 .detail-content__grid { display: grid; grid-template-columns: .45fr 1.55fr; gap: 60px; }
+.detail-content__grid--single { grid-template-columns: 1fr; }
 .detail-content__grid aside { display: flex; flex-direction: column; gap: 20px; color: $sand; }
 .detail-content__aside { color: $steel; font-size: 10px; letter-spacing: .16em; line-height: 1.8; }
 .detail-content h2, .project-story h2 { margin-bottom: 22px; font-size: clamp(43px,5.2vw,68px); }

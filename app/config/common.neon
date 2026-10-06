@@ -12,6 +12,7 @@ services:
 	- App\Model\ServiceRepository
 	- App\Model\PageRepository
 	- App\Model\InquiryRepository
+	- App\Model\FaqRepository
 	- App\Model\SettingRepository
 	- App\Model\SeoRepository
 	- App\Model\NavigationRepository
