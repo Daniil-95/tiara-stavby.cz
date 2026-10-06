@@ -44,7 +44,6 @@ final class PagesPresenter extends BasePresenter
 		$project = $this->projects->find($id, 'cs');
 		if (!$project) $this->error('Project not found.');
 		$this->template->project = $project;
-		$this->template->images = $this->projects->gallery($id);
 		$this->template->pageTitle = $project['title'];
 	}
 

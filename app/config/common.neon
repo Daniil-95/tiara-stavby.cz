@@ -24,7 +24,6 @@ services:
 	- App\Model\NavigationRepository
 	- App\Model\UserRepository
 	- App\Model\LoginLogRepository
-	- App\Model\ProjectImageRepository
 	- App\Model\ImageManager
 
 database:

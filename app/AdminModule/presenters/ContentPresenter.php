@@ -14,7 +14,7 @@ final class ContentPresenter extends BasePresenter
 	private const TABLES = [
 		'projects' => 'projects', 'services' => 'services', 'pages' => 'page_sections',
 		'inquiries' => 'inquiries', 'settings' => 'settings', 'navigation' => 'navigation',
-		'seo' => 'seo_metadata', 'gallery' => 'project_images',
+		'seo' => 'seo_metadata',
 	];
 	private string $section = 'projects';
 	private ?array $entry = null;
@@ -29,7 +29,7 @@ final class ContentPresenter extends BasePresenter
 		if (!isset(self::TABLES[$this->section])) $this->error('Section not found.', 404);
 		$id = (int) ($this->getParameter('id') ?? 0);
 		$selection = $this->database->table(self::TABLES[$this->section]);
-		if (in_array($this->section, ['projects', 'services', 'pages', 'navigation', 'seo', 'gallery'], true)) $selection->where('lang', 'cs');
+		if (in_array($this->section, ['projects', 'services', 'pages', 'navigation', 'seo'], true)) $selection->where('lang', 'cs');
 		$row = $id ? $selection->get($id) : null;
 		$this->entry = $row ? $row->toArray() : null;
 		if ($id && !$this->entry) $this->error('Entry not found.', 404);
@@ -43,8 +43,6 @@ final class ContentPresenter extends BasePresenter
 		$this->template->entry = $this->entry;
 		$this->template->sectionTitle = $this->titleFor($this->section);
 		$this->template->rows = $this->rows();
-		$this->template->projectOptions = $this->projectOptions();
-		$this->template->galleryProjectId = (int) ($this->getParameter('project_id') ?? 0);
 		$this->template->filteredStatus = $this->getParameter('status');
 	}
 
@@ -68,16 +66,6 @@ final class ContentPresenter extends BasePresenter
 				foreach (['active', 'featured', 'consent'] as $checkbox) if (isset($data[$checkbox])) $data[$checkbox] = (int) $data[$checkbox];
 				if ($this->section === 'inquiries') {
 					$this->database->table('inquiries')->where('id', (int) $this->getParameter('id'))->update(['status' => $data['status']]);
-				} elseif ($this->section === 'gallery') {
-					$imagePath = $data['image_path'] ?? ($this->entry['image_path'] ?? '');
-					unset($data['image_path']);
-					$project = $this->database->table('projects')->get((int) $data['project_id']);
-					$galleryData = [
-						'project_id' => (int) $data['project_id'], 'lang' => $project->lang, 'image_path' => $imagePath,
-						'title' => $data['title'] ?: null, 'alt_text' => $data['alt_text'], 'sort_order' => (int) $data['sort_order'],
-					];
-					if ($this->getParameter('operation') === 'edit') $this->database->table('project_images')->where('id', (int) $this->getParameter('id'))->update($galleryData);
-					else $this->database->table('project_images')->insert($galleryData);
 				} elseif ($this->section === 'settings') {
 					if ($this->getParameter('operation') === 'edit') $this->database->table('settings')->where('id', (int) $this->getParameter('id'))->update($data);
 					else $this->database->table('settings')->insert($data);
@@ -124,38 +112,11 @@ final class ContentPresenter extends BasePresenter
 				$project = $this->database->table('projects')->get($id);
 				if ($project) $this->images->deleteProjectImage($project->main_image);
 				$this->database->table('projects')->where('id', $id)->delete();
-			} elseif ($this->section === 'gallery') {
-				$image = $this->database->table('project_images')->get($id);
-				if ($image) $this->images->deleteProjectImage($image->image_path);
-				$this->database->table('project_images')->where('id', $id)->delete();
 			} else {
 				$this->database->table(self::TABLES[$this->section])->where('id', $id)->delete();
 			}
 			$this->flashMessage('Záznam byl odstraněn.', 'success');
 			$this->redirect('default', ['section' => $this->section]);
-		};
-		return $form;
-	}
-
-	protected function createComponentGalleryOrderForm(): Form
-	{
-		$form = new Form;
-		$form->setAction($this->currentFormAction());
-		$form->addHidden('order')->setDefaultValue(implode(',', array_map(static fn($row) => (string) $row->id, $this->rows())));
-		$form->addProtection('Pořadí fotografií vypršelo. Obnovte stránku.');
-		$form->addSubmit('save', 'Uložit pořadí')->setHtmlAttribute('class', 'admin-button');
-		$form->onSuccess[] = function (Form $form, \stdClass $values): void {
-			$projectId = (int) ($this->getParameter('project_id') ?? 0);
-			$ids = array_values(array_filter(array_map('intval', explode(',', (string) $values->order))));
-			$allowed = array_map(static fn($row) => (int) $row->id, $this->database->table('project_images')->where('project_id', $projectId)->fetchAll());
-			$sortedIds = $ids; $sortedAllowed = $allowed; sort($sortedIds); sort($sortedAllowed);
-			if (!$projectId || !$ids || count($ids) !== count(array_unique($ids)) || $sortedIds !== $sortedAllowed) {
-				$form->addError('Pořadí fotografií není platné. Obnovte stránku a zkuste to znovu.');
-				return;
-			}
-			foreach ($ids as $order => $imageId) $this->database->table('project_images')->where('id', $imageId)->where('project_id', $projectId)->update(['sort_order' => $order + 1]);
-			$this->flashMessage('Pořadí fotografií bylo uloženo.', 'success');
-			$this->redirect('default', ['section' => 'gallery', 'project_id' => $projectId]);
 		};
 		return $form;
 	}
@@ -194,11 +155,7 @@ final class ContentPresenter extends BasePresenter
 			case 'seo':
 				$form->addText('page_path', 'Cesta stránky')->setRequired(); $form->addHidden('lang')->setDefaultValue('cs'); $form->addText('meta_title', 'Meta title'); $form->addTextArea('meta_description', 'Meta description'); $form->addText('og_title', 'OG title'); $form->addTextArea('og_description', 'OG description'); $form->addText('og_image', 'OG image URL'); $form->addText('canonical_url', 'Canonical URL'); $form->addText('robots', 'Robots')->setDefaultValue('index,follow');
 				break;
-			case 'gallery':
-				$form->addSelect('project_id', 'Projekt', $this->projectOptions())->setRequired(); $form->addUpload('image', 'Fotografie')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024); $form->addText('title', 'Název'); $form->addText('alt_text', 'Alternativní text')->setRequired(); $form->addText('sort_order', 'Pořadí')->setDefaultValue(0);
-				break;
 		}
-		if ($this->section === 'gallery' && $this->getParameter('operation') !== 'edit') $form['image']->setRequired('Vyberte fotografii.');
 	}
 
 	private function rows(): array
@@ -209,27 +166,14 @@ final class ContentPresenter extends BasePresenter
 			if (in_array($status, ['new', 'contacted', 'closed'], true)) $selection->where('status', $status);
 			return $selection->limit(250)->fetchAll();
 		}
-		if ($this->section === 'gallery') {
-			$selection = $this->database->table('project_images')->order('sort_order ASC, id ASC');
-			$projectId = (int) ($this->getParameter('project_id') ?? 0);
-			if ($projectId) $selection->where('project_id', $projectId);
-			return $selection->limit(250)->fetchAll();
-		}
 		$selection = $this->database->table(self::TABLES[$this->section])->order('id DESC');
 		if (in_array($this->section, ['projects', 'services', 'pages', 'navigation', 'seo'], true)) $selection->where('lang', 'cs');
 		return $selection->limit(250)->fetchAll();
 	}
 
-	private function projectOptions(): array
-	{
-		$options = [];
-		foreach ($this->database->table('projects')->where('lang', 'cs')->order('title ASC')->fetchAll() as $project) $options[$project->id] = $project->title;
-		return $options;
-	}
-
 	private function titleFor(string $section): string
 	{
-		return ['projects' => 'Realizované projekty', 'services' => 'Služby', 'pages' => 'Stránky a sekce', 'inquiries' => 'Poptávky', 'settings' => 'Nastavení', 'navigation' => 'Navigace', 'seo' => 'SEO', 'gallery' => 'Galerie projektu'][$section] ?? 'Obsah';
+		return ['projects' => 'Realizované projekty', 'services' => 'Služby', 'pages' => 'Stránky a sekce', 'inquiries' => 'Poptávky', 'settings' => 'Nastavení', 'navigation' => 'Navigace', 'seo' => 'SEO'][$section] ?? 'Obsah';
 	}
 
 	private function currentFormAction(): string
