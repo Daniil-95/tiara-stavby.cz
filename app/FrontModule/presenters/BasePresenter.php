@@ -108,13 +108,13 @@ abstract class BasePresenter extends Presenter
 		$form->addSubmit('send', 'Odeslat poptávku')->setHtmlAttribute('class', 'button button--gold');
 		$form->onSuccess[] = function (Form $form, \stdClass $values): void {
 			if (trim((string) $values->website) !== '') {
-				$this->redirect('Pages:thanks');
+				$this->redirectToContact();
 			}
 			$submission = $this->getSession()->getSection('inquiry');
 			$expectedToken = $submission->get('submissionToken');
 			if (!is_string($expectedToken) || !hash_equals($expectedToken, (string) $values->submissionToken)) {
 				$this->flashMessage('Vaši poptávku už jsme přijali.', 'success');
-				$this->redirect('Pages:thanks');
+				$this->redirectToContact();
 			}
 			$ip = $this->getHttpRequest()->getRemoteAddress() ?: 'unknown';
 			try {
@@ -134,8 +134,8 @@ abstract class BasePresenter extends Presenter
 				]);
 				$submission->set('submissionToken', Random::generate(40));
 				$this->notifyAdmin($values);
-				$this->flashMessage('Děkujeme. Brzy se vám ozveme.', 'success');
-				$this->redirect('Pages:thanks');
+				$this->flashMessage('Děkujeme! Vaše zpráva byla odeslána. Brzy se vám ozveme.', 'success');
+				$this->redirectToContact();
 			} catch (\Nette\Application\AbortException $e) {
 				throw $e;
 			} catch (\Throwable $e) {
@@ -144,6 +144,11 @@ abstract class BasePresenter extends Presenter
 			}
 		};
 		return $form;
+	}
+
+	private function redirectToContact(): never
+	{
+		$this->redirect('Home:default#contact');
 	}
 
 	private function notifyAdmin(\stdClass $values): void

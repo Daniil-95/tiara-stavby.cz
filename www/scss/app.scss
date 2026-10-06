@@ -70,8 +70,12 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 .nav-link--admin:hover, .nav-link--admin:focus-visible { color: $sand; }
 .header__cta { white-space: nowrap; }
 .menu-toggle { display: none; }
-.site-flash { position: relative; z-index: 4; padding: 12px max(24px, calc((100% - 1320px) / 2)); background: #edf4ed; color: #365c38; font-size: 12px; }
-.site-flash--error { background: #fff0ee; color: #8f3c2c; }
+.site-flash { position: fixed; top: 24px; right: 24px; z-index: 1000; display: flex; max-width: min(440px, calc(100vw - 32px)); align-items: center; gap: 14px; padding: 18px 20px; border-left: 4px solid #4a8a4d; border-radius: 6px; background: #edf4ed; box-shadow: 0 18px 50px rgba(0,0,0,.22); color: #264d28; font-size: 15px; font-weight: 600; line-height: 1.4; animation: flash-in .35s ease-out; transition: opacity .4s ease, transform .4s ease; }
+.site-flash > i { font-size: 22px; }
+.site-flash.is-hiding { opacity: 0; transform: translateY(-12px); }
+.site-flash__close { margin-left: auto; padding: 0 4px; border: 0; background: none; color: inherit; font-size: 24px; line-height: 1; cursor: pointer; }
+@keyframes flash-in { from { opacity: 0; transform: translateY(-16px); } }
+.site-flash--error { border-left-color: #c0513c; background: #fff0ee; color: #8f3c2c; }
 
 .hero { position: relative; min-height: min(760px, calc(100svh - 124px)); overflow: hidden; background: $navy-deep; color: $white; }
 .hero__picture, .hero__picture img, .hero__scrim { position: absolute; inset: 0; width: 100%; height: 100%; }

@@ -107,4 +107,12 @@
   document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => {
     if (form.classList.contains('contact-form') && !form.reportValidity()) event.preventDefault();
   }));
-})();
+
+  document.querySelectorAll('[data-flash]').forEach((flash) => {
+    const hide = () => {
+      flash.classList.add('is-hiding');
+      setTimeout(() => flash.remove(), 450);
+    };
+    flash.querySelector('[data-flash-close]')?.addEventListener('click', hide);
+    setTimeout(hide, 8000);
+  });})();

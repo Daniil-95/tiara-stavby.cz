@@ -4,16 +4,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#f6f5f2">
-	<meta name="description" content="{ifset $metaDescription}{$metaDescription}{else}Výstavba, rekonstrukce a modernizace od TIARA s.r.o.{/ifset}">
+	<meta name="description" content="{if !empty($metaDescription)}{$metaDescription}{else}Výstavba, rekonstrukce a modernizace od TIARA s.r.o.{/if}">
 	{ifset $metaKeywords}{if $metaKeywords !== ''}<meta name="keywords" content="{$metaKeywords}">{/if}{/ifset}
-	<meta name="robots" content="{ifset $robots}{$robots}{else}index,follow{/ifset}">
-	{ifset $metaTitle}<title>{$metaTitle}</title>{else}<title>{ifset $pageTitle}{$pageTitle} · {/ifset}TIARA s.r.o. — Stavební práce</title>{/ifset}
+	<meta name="robots" content="{if !empty($robots)}{$robots}{else}index,follow{/if}">
+	{if !empty($metaTitle)}<title>{$metaTitle}</title>{else}<title>{ifset $pageTitle}{$pageTitle} · {/ifset}TIARA s.r.o. — Stavební práce</title>{/if}
 	<meta property="og:type" content="website">
 	<meta property="og:site_name" content="TIARA s.r.o.">
-	<meta property="og:title" content="{ifset $ogTitle}{$ogTitle}{else}TIARA s.r.o.{/ifset}">
-	<meta property="og:description" content="{ifset $ogDescription}{$ogDescription}{else}Stavební práce TIARA s.r.o.{/ifset}">
-	{ifset $ogImage}<meta property="og:image" content="{$ogImage}">{/ifset}
-	{ifset $canonical}<link rel="canonical" href="{$canonical}">{/ifset}
+	<meta property="og:title" content="{if !empty($ogTitle)}{$ogTitle}{else}TIARA s.r.o.{/if}">
+	<meta property="og:description" content="{if !empty($ogDescription)}{$ogDescription}{else}Stavební práce TIARA s.r.o.{/if}">
+	{if !empty($ogImage)}<meta property="og:image" content="{$ogImage}">{/if}
+	{if !empty($canonical)}<link rel="canonical" href="{$canonical}">{/if}
 	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
 			<a class="button button--small button--navy header__cta" href="{$company['header_cta_url'] ?? '/#contact'}" aria-label="{$company['header_cta_label'] ?? 'Nezávazná poptávka'}"><span>{$company['header_cta_label'] ?? 'Nezávazná poptávka'}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
 		</div>
 	</header>
-	{foreach $flashes as $flash}<div class="site-flash site-flash--{$flash->type}" role="status">{$flash->message}</div>{/foreach}
+	{foreach $flashes as $flash}<div class="site-flash site-flash--{$flash->type}" role="status" aria-live="polite" data-flash><i class="fa-solid {if $flash->type === 'error'}fa-circle-exclamation{else}fa-circle-check{/if}" aria-hidden="true"></i><span>{$flash->message}</span><button type="button" class="site-flash__close" aria-label="Zavřít" data-flash-close>&times;</button></div>{/foreach}
 	<main id="main">{include content}</main>
 	<footer class="site-footer">
 		<div class="container footer__main">
