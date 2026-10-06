@@ -26,6 +26,9 @@ Projekt používá PHP 8.2, Nette Framework 3.2, šablony Latte 3 a databázi My
 
    Skript pro vytvoření účtu si vyžádá jméno, e-mail a heslo.
 
+   Přihlašovací stránka administrace záměrně neuvádí tento technický příkaz běžným
+   uživatelům. Pro vytvoření prvního administrátora použijte `php bin/create-admin.php`.
+
 5. Spusťte místní web:
 
    ```sh
