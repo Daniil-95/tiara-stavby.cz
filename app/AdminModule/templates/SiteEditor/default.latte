@@ -1,11 +1,7 @@
 {block content}
 <div class="admin-page-heading site-editor-heading">
 	<div><p class="admin-kicker">OBSAH WEBU / ÚPRAVA STRÁNKY</p><h1>{$editorPages[$editorPage]}</h1><p>Upravte texty a fotografie stránky na jednom místě.</p></div>
-	<a class="admin-button admin-button--quiet" href="/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Zobrazit web</a>
 </div>
-<nav class="site-editor-tabs" aria-label="Upravovaná stránka">
-	{foreach $editorPages as $key => $label}<a href="/admin/editor/{$key}" class="{if $editorPage === $key}is-active{/if}" {if $editorPage === $key}aria-current="page"{/if}>{$label}</a>{/foreach}
-</nav>
 <div class="site-editor-layout">
 	<div class="site-editor-main">
 	{form pageForm}
@@ -17,26 +13,26 @@
 			<div class="editor-field editor-field--wide"><label>{label hero_image /}</label>{input hero_image, data-preview-target => 'hero-preview'}<small>JPG, PNG, GIF nebo WebP, maximálně 8 MB.</small></div>
 			<div class="editor-field editor-field--wide"><label>{label hero_image_alt /}</label>{input hero_image_alt}</div>
 		</div></section>
-		<section class="editor-group"><header><span>02</span><div><h2>Blok O nás</h2><p>Tento text se zobrazuje také na stránce O nás.</p></div></header><div class="editor-fields editor-fields--two">
-			<div class="editor-field"><label>{label about_title /}</label>{input about_title}</div><div class="editor-field"><label>{label about_subtitle /}</label>{input about_subtitle}</div>
-			<div class="editor-field editor-field--wide"><label>{label about_text /}</label>{input about_text}</div>
-			<div class="editor-field editor-field--wide"><label>{label home_about_image /}</label>{input home_about_image, data-preview-target => 'home-about-preview'}<small>JPG, PNG, GIF nebo WebP, maximálně 8 MB.</small></div>
-			<div class="editor-field editor-field--wide"><label>{label home_about_image_alt /}</label>{input home_about_image_alt}</div>
+		<section class="editor-group"><header><span>02</span><div><h2>Jistota v každém detailu</h2><p>Text a čtyři hlavní výhody společnosti.</p></div></header><div class="editor-fields editor-fields--two">
+			<div class="editor-field editor-field--wide"><label>{label benefits_kicker /}</label>{input benefits_kicker}</div>
+			<div class="editor-field"><label>{label benefits_title_one /}</label>{input benefits_title_one}</div><div class="editor-field"><label>{label benefits_title_two /}</label>{input benefits_title_two}</div>
+			<div class="editor-field editor-field--wide"><label>{label benefits_intro /}</label>{input benefits_intro}</div>
+			<div class="editor-field"><label>{label benefits_item_1_title /}</label>{input benefits_item_1_title}</div><div class="editor-field"><label>{label benefits_item_1_text /}</label>{input benefits_item_1_text}</div>
+			<div class="editor-field"><label>{label benefits_item_2_title /}</label>{input benefits_item_2_title}</div><div class="editor-field"><label>{label benefits_item_2_text /}</label>{input benefits_item_2_text}</div>
+			<div class="editor-field"><label>{label benefits_item_3_title /}</label>{input benefits_item_3_title}</div><div class="editor-field"><label>{label benefits_item_3_text /}</label>{input benefits_item_3_text}</div>
+			<div class="editor-field"><label>{label benefits_item_4_title /}</label>{input benefits_item_4_title}</div><div class="editor-field"><label>{label benefits_item_4_text /}</label>{input benefits_item_4_text}</div>
 		</div></section>
 		<section class="editor-group"><header><span>03</span><div><h2>Čísla a zkušenosti</h2><p>Krátké hodnoty zobrazované v přehledu společnosti.</p></div></header><div class="editor-fields editor-fields--three">
 			<div class="editor-field"><label>{label stat_projects /}</label>{input stat_projects}</div><div class="editor-field"><label>{label stat_years /}</label>{input stat_years}</div><div class="editor-field"><label>{label stat_satisfaction /}</label>{input stat_satisfaction}</div>
 			<div class="editor-field editor-field--wide"><label>{label stats_tagline /}</label>{input stats_tagline}</div>
 		</div></section>
-		<section class="editor-group"><header><span>04</span><div><h2>Výzva ke kontaktu</h2><p>Závěrečný blok s odkazem na kontaktní formulář.</p></div></header><div class="editor-fields editor-fields--two">
-			<div class="editor-field editor-field--wide"><label>{label cta_kicker /}</label>{input cta_kicker}</div><div class="editor-field"><label>{label cta_line_one /}</label>{input cta_line_one}</div><div class="editor-field"><label>{label cta_line_two /}</label>{input cta_line_two}</div>
-			<div class="editor-field editor-field--wide"><label>{label cta_text /}</label>{input cta_text}</div><div class="editor-field"><label>{label cta_button /}</label>{input cta_button}</div><div class="editor-field"><label>{label cta_url /}</label>{input cta_url}</div>
-		</div></section>
 		{elseif $editorPage === 'about'}
 		<section class="editor-group"><header><span>01</span><div><h2>Texty stránky</h2><p>Hlavní nadpis, podnadpis a úvodní text.</p></div></header><div class="editor-fields">
 			<div class="editor-field"><label>{label about_title /}</label>{input about_title}</div><div class="editor-field"><label>{label about_subtitle /}</label>{input about_subtitle}</div><div class="editor-field"><label>{label about_text /}</label>{input about_text}</div>
 		</div></section>
-		<section class="editor-group"><header><span>02</span><div><h2>Fotografie stránky</h2><p>Obrázek v úvodní části stránky O nás.</p></div></header><div class="editor-fields">
+		<section class="editor-group"><header><span>02</span><div><h2>Fotografie</h2><p>Fotografie stránky O nás a bloku na úvodní stránce.</p></div></header><div class="editor-fields editor-fields--two">
 			<div class="editor-field"><label>{label about_image /}</label>{input about_image, data-preview-target => 'about-preview'}<small>JPG, PNG, GIF nebo WebP, maximálně 8 MB.</small></div><div class="editor-field"><label>{label about_image_alt /}</label>{input about_image_alt}</div>
+			<div class="editor-field"><label>{label home_about_image /}</label>{input home_about_image, data-preview-target => 'home-about-preview'}<small>Fotografie bloku na úvodní stránce. JPG, PNG, GIF nebo WebP, maximálně 8 MB.</small></div><div class="editor-field"><label>{label home_about_image_alt /}</label>{input home_about_image_alt}</div>
 		</div></section>
 		{elseif $editorPage === 'seo'}
 		<section class="editor-group"><header><span>01</span><div><h2>SEO pro vybranou stránku</h2><p>Vyberte stránku a upravte její název a popis pro vyhledávače.</p></div></header><div class="editor-fields editor-fields--two">
@@ -68,11 +64,10 @@
 	</div>
 	<aside class="site-editor-preview" aria-label="Náhled stránky">
 		{if $editorPage === 'home'}
-			<section class="editor-preview-card"><h2>Náhled úvodu</h2><img id="hero-preview" src="{$editorData['hero_image_preview']}" alt="{$editorData['hero_image_alt']}"><p>{$editorData['hero_kicker']}</p><strong>{$editorData['hero_line_one']} {$editorData['hero_line_two']}</strong></section>
-			<section class="editor-preview-card"><h2>Náhled bloku O nás</h2><img id="home-about-preview" src="{$editorData['home_about_image_preview']}" alt="{$editorData['home_about_image_alt']}"><strong>{$editorData['about_title']}</strong><p>{$editorData['about_text']|truncate:150}</p></section>
-			<section class="editor-preview-card editor-preview-card--note"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i><p>Služby a realizace na úvodní stránce spravujete v jejich samostatných sekcích.</p></section>
+			<section class="editor-preview-card"><h2>Náhled úvodu</h2><img id="hero-preview" src="{$editorData['hero_image_preview']}" alt="{$editorData['hero_image_alt']}"></section>
 		{elseif $editorPage === 'about'}
 			<section class="editor-preview-card"><h2>Aktuální fotografie</h2><img id="about-preview" src="{$editorData['about_image_preview']}" alt="{$editorData['about_image_alt']}"><strong>{$editorData['about_title']}</strong><p>{$editorData['about_subtitle']}</p></section>
+			<section class="editor-preview-card"><h2>Náhled bloku na úvodní stránce</h2><img id="home-about-preview" src="{$editorData['home_about_image_preview']}" alt="{$editorData['home_about_image_alt']}"></section>
 		{elseif $editorPage === 'seo'}
 			<section class="editor-preview-card editor-preview-card--seo"><h2>Ukázka výsledku ve vyhledávání</h2><strong>{$editorData['meta_title'] ?: 'Název stránky'}</strong><p class="editor-preview-card__url">tiara-stavby.cz{$editorData['seo_path']}</p><p>{$editorData['meta_description'] ?: 'Popis stránky se zobrazí ve výsledcích vyhledávání.'}</p></section>
 			<section class="editor-preview-card editor-preview-card--note"><i class="fa-regular fa-circle-info" aria-hidden="true"></i><p>Úpravy SEO se týkají pouze vybrané stránky. URL vybírejte z existujících veřejných stránek.</p></section>
@@ -81,7 +76,6 @@
 		{else}
 			<section class="editor-preview-card"><h2>Kontaktní údaje</h2><dl><div><dt>Telefon</dt><dd>{$editorData['phone']}</dd></div><div><dt>E-mail</dt><dd>{$editorData['email']}</dd></div><div><dt>Adresa</dt><dd>{$editorData['address']}</dd></div><div><dt>Otevírací doba</dt><dd>{$editorData['hours']}</dd></div></dl></section>
 		{/if}
-		{if $editorPage !== 'settings'}<a class="editor-preview-link" href="{if $editorPage === 'home'}/{elseif $editorPage === 'about'}/o-nas{elseif $editorPage === 'seo'}{$editorData['seo_path']}{else}/#contact{/if}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Otevřít stránku webu</a>{/if}
 	</aside>
 </div>
 {/block}

@@ -61,10 +61,6 @@ final class SiteEditorPresenter extends BasePresenter
 			try {
 				$data = get_object_vars($values);
 				if ($this->page === 'home') {
-					if (!$this->isSafeLink((string) $data['cta_url'])) {
-						$form->addError('Odkaz tlačítka musí být interní cesta nebo platná adresa HTTP/HTTPS.');
-						return;
-					}
 					$this->saveHome($data);
 				}
 				elseif ($this->page === 'about') $this->saveAbout($data);
@@ -123,21 +119,18 @@ final class SiteEditorPresenter extends BasePresenter
 			$form->addTextArea('hero_intro', 'Úvodní text')->setRequired();
 			$form->addText('hero_image_alt', 'Alternativní text fotografie');
 			$form->addUpload('hero_image', 'Úvodní fotografie')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024);
-			$form->addText('about_title', 'Nadpis bloku O nás')->setRequired();
-			$form->addText('about_subtitle', 'Podnadpis bloku O nás');
-			$form->addTextArea('about_text', 'Text bloku O nás')->setRequired();
-			$form->addText('home_about_image_alt', 'Alternativní text fotografie');
-			$form->addUpload('home_about_image', 'Fotografie bloku O nás')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024);
+			$form->addText('benefits_kicker', 'Označení sekce')->setRequired();
+			$form->addText('benefits_title_one', 'Hlavní nadpis, první řádek')->setRequired();
+			$form->addText('benefits_title_two', 'Hlavní nadpis, druhý řádek')->setRequired();
+			$form->addTextArea('benefits_intro', 'Úvodní text sekce')->setRequired();
+			for ($item = 1; $item <= 4; $item++) {
+				$form->addText("benefits_item_{$item}_title", "Výhoda {$item}, nadpis")->setRequired();
+				$form->addTextArea("benefits_item_{$item}_text", "Výhoda {$item}, text")->setRequired();
+			}
 			$form->addText('stat_projects', 'Počet realizací')->setRequired();
 			$form->addText('stat_years', 'Počet let zkušeností')->setRequired();
 			$form->addText('stat_satisfaction', 'Spokojenost zákazníků')->setRequired();
 			$form->addText('stats_tagline', 'Závěrečný krátký údaj');
-			$form->addText('cta_kicker', 'Nadpis bloku výzvy')->setRequired();
-			$form->addText('cta_line_one', 'Hlavní nadpis, první řádek')->setRequired();
-			$form->addText('cta_line_two', 'Hlavní nadpis, druhý řádek')->setRequired();
-			$form->addTextArea('cta_text', 'Doplňující text');
-			$form->addText('cta_button', 'Text tlačítka')->setRequired();
-			$form->addText('cta_url', 'Odkaz tlačítka')->setRequired();
 			return;
 		}
 
@@ -147,6 +140,8 @@ final class SiteEditorPresenter extends BasePresenter
 			$form->addTextArea('about_text', 'Text stránky')->setRequired();
 			$form->addText('about_image_alt', 'Alternativní text fotografie');
 			$form->addUpload('about_image', 'Hlavní fotografie stránky')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024);
+			$form->addText('home_about_image_alt', 'Alternativní text fotografie úvodní stránky');
+			$form->addUpload('home_about_image', 'Fotografie bloku na úvodní stránce')->addRule($form::MaxFileSize, 'Maximální velikost je 8 MB.', 8 * 1024 * 1024);
 			return;
 		}
 		if ($this->page === 'seo') {
@@ -184,7 +179,6 @@ final class SiteEditorPresenter extends BasePresenter
 	private function loadData(): array
 	{
 		if ($this->page === 'home') {
-			$about = $this->section('about');
 			$stats = $this->section('stats');
 			$statParts = explode('|', (string) ($stats['content'] ?? ''));
 			return [
@@ -194,21 +188,22 @@ final class SiteEditorPresenter extends BasePresenter
 				'hero_intro' => $this->section('home_intro')['content'] ?? 'Kvalitní výstavba, rekonstrukce a modernizace pro váš domov i podnikání.',
 				'hero_image_alt' => $this->setting('home_hero_image_alt', 'Moderní rodinný dům obklopený zelení'),
 				'hero_image_preview' => $this->images->safeUrl($this->setting('home_hero_image', ''), 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80'),
-				'about_title' => $about['title'] ?? 'Spolehlivý stavební partner',
-				'about_subtitle' => $about['subtitle'] ?? 'TIARA s.r.o.',
-				'about_text' => $about['content'] ?? '',
-				'home_about_image_alt' => $this->setting('home_about_image_alt', 'Stavební tým TIARA při práci na realizaci'),
-				'home_about_image_preview' => $this->images->safeUrl($this->setting('home_about_image', ''), 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=82'),
+				'benefits_kicker' => $this->setting('home_benefits_kicker', '03 / PROČ TIARA'),
+				'benefits_title_one' => $this->setting('home_benefits_title_one', 'Jistota v každém'),
+				'benefits_title_two' => $this->setting('home_benefits_title_two', 'detailu.'),
+				'benefits_intro' => $this->setting('home_benefits_intro', 'Dobrá stavba začíná nasloucháním a končí výsledkem, který obstojí v čase.'),
+				'benefits_item_1_title' => $this->setting('home_benefits_item_1_title', 'Kvalita a preciznost'),
+				'benefits_item_1_text' => $this->setting('home_benefits_item_1_text', 'Pečlivé řemeslné provedení v každé vrstvě.'),
+				'benefits_item_2_title' => $this->setting('home_benefits_item_2_title', 'Spolehlivé termíny'),
+				'benefits_item_2_text' => $this->setting('home_benefits_item_2_text', 'Jasný plán a dohody, které platí.'),
+				'benefits_item_3_title' => $this->setting('home_benefits_item_3_title', 'Osobní přístup'),
+				'benefits_item_3_text' => $this->setting('home_benefits_item_3_text', 'Řešení připravené podle vašich potřeb.'),
+				'benefits_item_4_title' => $this->setting('home_benefits_item_4_title', 'Moderní technologie'),
+				'benefits_item_4_text' => $this->setting('home_benefits_item_4_text', 'Promyšlené materiály a ověřené postupy.'),
 				'stat_projects' => $this->setting('stat_projects', '100+'),
 				'stat_years' => $this->setting('stat_years', '10+'),
 				'stat_satisfaction' => $this->setting('stat_satisfaction', '100%'),
 				'stats_tagline' => $statParts[3] ?? 'Stavíme s jistotou.',
-				'cta_kicker' => $this->setting('home_cta_kicker', 'VÁŠ DALŠÍ PROJEKT'),
-				'cta_line_one' => $this->setting('home_cta_line_one', 'PLÁNUJETE STAVBU'),
-				'cta_line_two' => $this->setting('home_cta_line_two', 'NEBO REKONSTRUKCI?'),
-				'cta_text' => $this->section('cta')['content'] ?? '',
-				'cta_button' => $this->setting('home_cta_button', 'Nezávazná poptávka'),
-				'cta_url' => $this->setting('home_cta_url', '/#contact'),
 			];
 		}
 
@@ -220,6 +215,8 @@ final class SiteEditorPresenter extends BasePresenter
 				'about_text' => $about['content'] ?? '',
 				'about_image_alt' => $this->setting('about_image_alt', 'Průběh stavby a práce stavebního týmu'),
 				'about_image_preview' => $this->images->safeUrl($about['image_path'] ?? null, 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1500&q=84'),
+				'home_about_image_alt' => $this->setting('home_about_image_alt', 'Stavební tým TIARA při práci na realizaci'),
+				'home_about_image_preview' => $this->images->safeUrl($this->setting('home_about_image', ''), 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=82'),
 			];
 		}
 		if ($this->page === 'settings') return [
@@ -256,20 +253,21 @@ final class SiteEditorPresenter extends BasePresenter
 	private function saveHome(array $data): void
 	{
 		$heroImage = $this->storeUpload($data['hero_image'] ?? null, $this->setting('home_hero_image', ''));
-		$aboutImage = $this->storeUpload($data['home_about_image'] ?? null, $this->setting('home_about_image', ''));
 		$settings = [
 			'home_hero_kicker' => $data['hero_kicker'], 'home_hero_line_one' => $data['hero_line_one'],
 			'home_hero_line_two' => $data['hero_line_two'], 'home_hero_image' => $heroImage,
-			'home_hero_image_alt' => $data['hero_image_alt'], 'home_about_image' => $aboutImage,
-			'home_about_image_alt' => $data['home_about_image_alt'], 'stat_projects' => $data['stat_projects'],
+			'home_hero_image_alt' => $data['hero_image_alt'], 'stat_projects' => $data['stat_projects'],
 			'stat_years' => $data['stat_years'], 'stat_satisfaction' => $data['stat_satisfaction'], 'tagline' => $data['stats_tagline'],
-			'home_cta_kicker' => $data['cta_kicker'], 'home_cta_line_one' => $data['cta_line_one'],
-			'home_cta_line_two' => $data['cta_line_two'], 'home_cta_button' => $data['cta_button'], 'home_cta_url' => $data['cta_url'],
+			'home_benefits_kicker' => $data['benefits_kicker'],
+			'home_benefits_title_one' => $data['benefits_title_one'], 'home_benefits_title_two' => $data['benefits_title_two'],
+			'home_benefits_intro' => $data['benefits_intro'],
 		];
+		for ($item = 1; $item <= 4; $item++) {
+			$settings["home_benefits_item_{$item}_title"] = $data["benefits_item_{$item}_title"];
+			$settings["home_benefits_item_{$item}_text"] = $data["benefits_item_{$item}_text"];
+		}
 		$this->saveSettings($settings, 'homepage');
 		$this->saveSection('home_intro', ['content' => $data['hero_intro']]);
-		$this->saveSection('about', ['title' => $data['about_title'], 'subtitle' => $data['about_subtitle'], 'content' => $data['about_text']]);
-		$this->saveSection('cta', ['title' => $data['cta_line_one'] . ' ' . $data['cta_line_two'], 'content' => $data['cta_text']]);
 		$stats = $this->section('stats');
 		$statParts = explode('|', (string) ($stats['content'] ?? '100+ realizovaných projektů|10+ let zkušeností|100% spokojených zákazníků|'));
 		$statParts = array_pad(array_slice($statParts, 0, 4), 4, '');
@@ -281,11 +279,16 @@ final class SiteEditorPresenter extends BasePresenter
 	{
 		$current = $this->section('about');
 		$image = $this->storeUpload($data['about_image'] ?? null, $current['image_path'] ?? '');
+		$homeImage = $this->storeUpload($data['home_about_image'] ?? null, $this->setting('home_about_image', ''));
 		$this->saveSection('about', [
 			'title' => $data['about_title'], 'subtitle' => $data['about_subtitle'],
 			'content' => $data['about_text'], 'image_path' => $image,
 		]);
-		$this->saveSettings(['about_image_alt' => $data['about_image_alt']], 'content');
+		$this->saveSettings([
+			'about_image_alt' => $data['about_image_alt'],
+			'home_about_image' => $homeImage,
+			'home_about_image_alt' => $data['home_about_image_alt'],
+		], 'content');
 	}
 
 	private function saveContact(array $data): void
