@@ -85,7 +85,7 @@ final class SiteEditorPresenter extends BasePresenter
 					$this->saveSettings([
 						'company_name' => $data['company_name'], 'admin_email' => $data['admin_email'],
 						'ico' => $data['ico'], 'dic' => $data['dic'], 'facebook' => $data['facebook'],
-						'instagram' => $data['instagram'], 'linkedin' => $data['linkedin'], 'tagline' => $data['tagline'],
+						'instagram' => $data['instagram'], 'linkedin' => $data['linkedin'],
 						'header_cta_label' => $data['header_cta_label'], 'header_cta_url' => $data['header_cta_url'],
 					], 'general');
 				}
@@ -130,7 +130,6 @@ final class SiteEditorPresenter extends BasePresenter
 			$form->addText('stat_projects', 'Počet realizací')->setRequired();
 			$form->addText('stat_years', 'Počet let zkušeností')->setRequired();
 			$form->addText('stat_satisfaction', 'Spokojenost zákazníků')->setRequired();
-			$form->addText('stats_tagline', 'Závěrečný krátký údaj');
 			return;
 		}
 
@@ -161,7 +160,6 @@ final class SiteEditorPresenter extends BasePresenter
 			$form->addEmail('admin_email', 'E-mail administrátora')->setRequired();
 			$form->addText('ico', 'IČO'); $form->addText('dic', 'DIČ');
 			$form->addText('facebook', 'Facebook URL'); $form->addText('instagram', 'Instagram URL'); $form->addText('linkedin', 'LinkedIn URL');
-			$form->addText('tagline', 'Slogan společnosti');
 			$form->addText('header_cta_label', 'Text hlavního tlačítka')->setRequired();
 			$form->addText('header_cta_url', 'Odkaz hlavního tlačítka')->setRequired();
 			return;
@@ -179,8 +177,6 @@ final class SiteEditorPresenter extends BasePresenter
 	private function loadData(): array
 	{
 		if ($this->page === 'home') {
-			$stats = $this->section('stats');
-			$statParts = explode('|', (string) ($stats['content'] ?? ''));
 			return [
 				'hero_kicker' => $this->setting('home_hero_kicker', 'STAVÍME VAŠI LEPŠÍ BUDOUCNOST'),
 				'hero_line_one' => $this->setting('home_hero_line_one', 'VEŠKERÉ'),
@@ -203,7 +199,6 @@ final class SiteEditorPresenter extends BasePresenter
 				'stat_projects' => $this->setting('stat_projects', '100+'),
 				'stat_years' => $this->setting('stat_years', '10+'),
 				'stat_satisfaction' => $this->setting('stat_satisfaction', '100%'),
-				'stats_tagline' => $statParts[3] ?? 'Stavíme s jistotou.',
 			];
 		}
 
@@ -224,7 +219,7 @@ final class SiteEditorPresenter extends BasePresenter
 			'admin_email' => $this->setting('admin_email', 'info@tiara-stavby.cz'),
 			'ico' => $this->setting('ico', ''), 'dic' => $this->setting('dic', ''),
 			'facebook' => $this->setting('facebook', ''), 'instagram' => $this->setting('instagram', ''),
-			'linkedin' => $this->setting('linkedin', ''), 'tagline' => $this->setting('tagline', 'Stavíme s jistotou.'),
+			'linkedin' => $this->setting('linkedin', ''),
 			'header_cta_label' => $this->setting('header_cta_label', 'Nezávazná poptávka'),
 			'header_cta_url' => $this->setting('header_cta_url', '/#contact'),
 		];
@@ -257,7 +252,7 @@ final class SiteEditorPresenter extends BasePresenter
 			'home_hero_kicker' => $data['hero_kicker'], 'home_hero_line_one' => $data['hero_line_one'],
 			'home_hero_line_two' => $data['hero_line_two'], 'home_hero_image' => $heroImage,
 			'home_hero_image_alt' => $data['hero_image_alt'], 'stat_projects' => $data['stat_projects'],
-			'stat_years' => $data['stat_years'], 'stat_satisfaction' => $data['stat_satisfaction'], 'tagline' => $data['stats_tagline'],
+			'stat_years' => $data['stat_years'], 'stat_satisfaction' => $data['stat_satisfaction'],
 			'home_benefits_kicker' => $data['benefits_kicker'],
 			'home_benefits_title_one' => $data['benefits_title_one'], 'home_benefits_title_two' => $data['benefits_title_two'],
 			'home_benefits_intro' => $data['benefits_intro'],
@@ -268,11 +263,6 @@ final class SiteEditorPresenter extends BasePresenter
 		}
 		$this->saveSettings($settings, 'homepage');
 		$this->saveSection('home_intro', ['content' => $data['hero_intro']]);
-		$stats = $this->section('stats');
-		$statParts = explode('|', (string) ($stats['content'] ?? '100+ realizovaných projektů|10+ let zkušeností|100% spokojených zákazníků|'));
-		$statParts = array_pad(array_slice($statParts, 0, 4), 4, '');
-		$statParts[3] = $data['stats_tagline'];
-		$this->saveSection('stats', ['content' => implode('|', $statParts)]);
 	}
 
 	private function saveAbout(array $data): void
