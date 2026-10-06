@@ -403,7 +403,7 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.main-nav.is-open { transform: translateX(0); visibility: visible; transition-delay: 0s; }
 	.site-header.is-scrolled .main-nav { top: 76px; }
 	.nav-link { min-height: 62px; border-bottom: 1px solid $rule; font-family: $display; font-size: 22px; }
-	.nav-link--admin { width: 40px; min-height: 40px; margin-top: 20px; padding: 0; border: 1px solid rgba($navy,.14); color: rgba($navy,.55); }
+	.nav-link--admin { width: 40px; height: 40px; min-height: 40px; flex: 0 0 40px; margin-top: 20px; padding: 0; border: 1px solid rgba($navy,.14); color: rgba($navy,.55); }
 	.nav-link::after { display: none; }
 	.header__cta { min-height: 40px; padding-inline: 12px; font-size: 8px; }
 	.topline { height: 30px; font-size: 9px; }
@@ -438,9 +438,9 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.projects-carousel .project-card { flex-basis: 44%; }
 	.project-card h3, .project-card h2 { font-size: 20px; }
 	.stats-band__inner { grid-template-columns: .7fr 1.3fr; gap: 35px; }
-	.stats-list { grid-template-columns: repeat(2,1fr); row-gap: 18px; }
-	.stats-list > div { min-height: 82px; }
-	.stats-list > div:nth-child(3) { grid-column: 1 / -1; text-align: center; }
+	.stats-list { grid-template-columns: 1fr; row-gap: 0; }
+	.stats-list > div { display: grid; grid-template-columns: minmax(94px, .45fr) 1fr; min-height: 76px; align-items: center; padding: 14px 0 14px 18px; border-bottom: 1px solid rgba($white,.15); }
+	.stats-list > div:nth-child(3) { grid-column: auto; text-align: left; }
 	.footer__main { grid-template-columns: 1fr 1fr; }
 	.page-hero--light { padding-block: 90px; }
 	.page-hero h1 { font-size: clamp(50px,8vw,73px); }
@@ -525,8 +525,8 @@ h1 em, h2 em { color: $sand; font-style: normal; }
 	.stats-band { padding-block: 59px; }
 	.stats-band__inner { grid-template-columns: 1fr; gap: 32px; }
 	.stats-band__intro h2 { font-size: 44px; }
-	.stats-list > div { padding-inline: 13px; }
-	.stats-list strong { font-size: 37px; }
+	.stats-list > div { padding-inline: 13px 0; }
+	.stats-list strong { margin-bottom: 0; font-size: 37px; }
 	.cta-section { padding-block: 65px; }
 	.cta-section__inner { align-items: start; flex-direction: column; }
 	.cta-section h2 { font-size: 36px; text-wrap: balance; }
