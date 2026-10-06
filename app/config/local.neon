@@ -1,8 +1,13 @@
-# Local-only fallback values. Production values are supplied through environment variables.
+# Local-only values. This file is not used in production.
 parameters:
-	dbHost: 127.0.0.1
-	dbName: tiara_stavby
-	dbUser: root
-	dbPassword: ''
 	adminEmail: info@tiara-stavby.cz
 	baseUrl: http://localhost
+
+database:
+	dsn: 'mysql:host=127.0.0.1;dbname=tiara_stavby;charset=utf8mb4'
+	user: root
+	password: ''
+	options:
+		PDO::ATTR_ERRMODE: PDO::ERRMODE_EXCEPTION
+		PDO::ATTR_DEFAULT_FETCH_MODE: PDO::FETCH_ASSOC
+		PDO::MYSQL_ATTR_INIT_COMMAND: "SET NAMES utf8mb4, sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'"

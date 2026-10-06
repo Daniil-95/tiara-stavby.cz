@@ -1,14 +1,7 @@
 parameters:
 	wwwDir: %rootDir%/www
-	dbHost: 127.0.0.1
-	dbName: tiara_stavby
-	dbUser: root
-	dbPassword: ''
-	adminEmail: info@tiara-stavby.cz
-	baseUrl: https://tiara-stavby.cz
 
 includes:
-	- local.neon
 	- www.neon
 
 services:
@@ -25,12 +18,3 @@ services:
 	- App\Model\UserRepository
 	- App\Model\LoginLogRepository
 	- App\Model\ImageManager
-
-database:
-	dsn: 'mysql:host=%dbHost%;dbname=%dbName%;charset=utf8mb4'
-	user: %dbUser%
-	password: %dbPassword%
-	options:
-		PDO::ATTR_ERRMODE: PDO::ERRMODE_EXCEPTION
-		PDO::ATTR_DEFAULT_FETCH_MODE: PDO::FETCH_ASSOC
-		PDO::MYSQL_ATTR_INIT_COMMAND: "SET NAMES utf8mb4, sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'"

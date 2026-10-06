@@ -17,7 +17,8 @@
     "nette/http": "~3.3.2",
     "nette/security": "~3.2.0",
     "nette/utils": "^4.0",
-    "latte/latte": "^3.0"
+    "latte/latte": "^3.0",
+    "tracy/tracy": "^2.10"
   },
   "autoload": { "psr-4": { "App\\": "app/" } },
   "config": { "allow-plugins": { "phpstan/extension-installer": false }, "sort-packages": true }
