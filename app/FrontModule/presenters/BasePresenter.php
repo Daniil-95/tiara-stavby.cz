@@ -133,8 +133,13 @@ abstract class BasePresenter extends Presenter
 					'ip_address' => $ip,
 				]);
 				$submission->set('submissionToken', Random::generate(40));
-				$this->notifyAdmin($values);
-				$this->flashMessage('Děkujeme! Vaše zpráva byla odeslána. Brzy se vám ozveme.', 'success');
+				$notificationSent = $this->notifyAdmin($values);
+				$this->flashMessage(
+					$notificationSent
+						? 'Děkujeme! Vaše zpráva byla odeslána. Brzy se vám ozveme.'
+						: 'Vaše zpráva byla uložena, ale e-mailové upozornění se nepodařilo odeslat.',
+					$notificationSent ? 'success' : 'warning',
+				);
 				$this->redirectToContact();
 			} catch (\Nette\Application\AbortException $e) {
 				throw $e;
@@ -151,15 +156,25 @@ abstract class BasePresenter extends Presenter
 		$this->redirect('Home:default#contact');
 	}
 
-	private function notifyAdmin(\stdClass $values): void
+	private function notifyAdmin(\stdClass $values): bool
 	{
 		$to = $this->settings->get('admin_email', 'info@tiara-stavby.cz');
 		$subject = mb_encode_mimeheader('Nová poptávka z webu TIARA', 'UTF-8');
 		$message = "Jméno: {$values->name}\nE-mail: {$values->email}\nTelefon: {$values->phone}\nSlužba: {$values->service}\n\n{$values->message}";
-		$headers = 'From: web@tiara-stavby.cz' . "\r\n" . 'Reply-To: ' . str_replace(["\r", "\n"], '', $values->email) . "\r\n" . 'Content-Type: text/plain; charset=UTF-8';
-		if (!@mail($to, $subject, $message, $headers)) {
+		$replyTo = filter_var($values->email, FILTER_VALIDATE_EMAIL) ? $values->email : 'web@tiara-stavby.cz';
+		$replyTo = str_replace(["\r", "\n"], '', (string) $replyTo);
+		$headers = implode("\r\n", [
+			'MIME-Version: 1.0',
+			'Content-Type: text/plain; charset=utf-8',
+			'Content-Transfer-Encoding: 8bit',
+			'From: TIARA web <web@tiara-stavby.cz>',
+			'Reply-To: ' . $replyTo,
+		]);
+		$sent = @mail($to, $subject, $message, $headers, '-fweb@tiara-stavby.cz');
+		if (!$sent) {
 			error_log('Inquiry notification email could not be sent to: ' . $to);
 		}
+		return $sent;
 	}
 
 	private function labels(): array

@@ -3,6 +3,12 @@
 /.npm-cache/
 /.agent-browser/
 /.composer-cache/
+/.env
+/.env.*
+!/.env.example
+/.phpunit.result.cache
+/.DS_Store
+/Thumbs.db
 /temp/*
 !/temp/.gitkeep
 /log/
