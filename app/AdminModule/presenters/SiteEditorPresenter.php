@@ -215,6 +215,7 @@ final class SiteEditorPresenter extends BasePresenter
 		}
 		if ($this->page === 'settings') return [
 			'company_name' => $this->setting('company_name', 'TIARA s.r.o.'),
+			'admin_email' => $this->setting('admin_email', 'info@tiara-stavby.cz'),
 			'ico' => $this->setting('ico', ''), 'dic' => $this->setting('dic', ''),
 			'facebook' => $this->setting('facebook', ''), 'instagram' => $this->setting('instagram', ''),
 			'linkedin' => $this->setting('linkedin', ''),
