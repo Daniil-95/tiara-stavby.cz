@@ -98,8 +98,13 @@ abstract class BasePresenter extends Presenter
 		$form->addEmail('email', 'E-mail')->setRequired($required)->addRule($form::MaxLength, null, 190);
 		$form->addText('phone', 'Telefon (nepovinné)')->addRule($form::MaxLength, null, 60);
 		$form->addSelect('service', 'Typ služby', $services)->setPrompt('Vyberte službu');
-		$form->addTextArea('message', 'Napište nám o svém projektu')->setRequired($required)->addRule($form::MinLength, 'Zpráva je příliš krátká.', 10)->addRule($form::MaxLength, null, 10000);
-		$form->addCheckbox('consent', 'Souhlasím se zpracováním osobních údajů.')->setRequired('Pro odeslání je nutný souhlas.');
+		$form->addTextArea('message', 'Napište nám o svém projektu (min. 10 znaků)')
+			->setRequired($required)
+			->setHtmlAttribute('minlength', '10')
+			->addRule($form::MinLength, 'Zpráva musí obsahovat alespoň 10 znaků.', 10)
+			->addRule($form::MaxLength, null, 10000);
+		$form->addCheckbox('consent', 'Souhlasím se zpracováním osobních údajů (povinné pro odeslání).')
+			->setRequired('Zaškrtněte prosím souhlas se zpracováním osobních údajů.');
 		$form->addText('website')->setHtmlAttribute('class', 'hp-field')->setHtmlAttribute('tabindex', '-1')->setHtmlAttribute('autocomplete', 'off');
 		$submission = $this->getSession()->getSection('inquiry');
 		if (!$submission->get('submissionToken')) $submission->set('submissionToken', Random::generate(40));
