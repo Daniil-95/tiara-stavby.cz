@@ -100,7 +100,6 @@ abstract class BasePresenter extends Presenter
 		$form->addSelect('service', 'Typ služby', $services)->setPrompt('Vyberte službu');
 		$form->addTextArea('message', 'Napište nám o svém projektu (min. 10 znaků)')
 			->setRequired($required)
-			->setHtmlAttribute('minlength', '10')
 			->addRule($form::MinLength, 'Zpráva musí obsahovat alespoň 10 znaků.', 10)
 			->addRule($form::MaxLength, null, 10000);
 		$form->addCheckbox('consent', 'Souhlasím se zpracováním osobních údajů (povinné pro odeslání).')
