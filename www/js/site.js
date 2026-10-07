@@ -104,9 +104,30 @@
     document.body.append(dialog); dialog.showModal();
   }));
 
-  document.querySelectorAll('form').forEach((form) => form.addEventListener('submit', (event) => {
-    if (form.classList.contains('contact-form') && !form.reportValidity()) event.preventDefault();
-  }));
+  document.querySelectorAll('form').forEach((form) => {
+    if (!form.classList.contains('contact-form')) return;
+    const message = form.querySelector('textarea[name="message"]');
+    const consent = form.querySelector('input[name="consent"]');
+    if (!message || !consent) return;
+
+    const validateContactFields = () => {
+      message.setCustomValidity(
+        message.value.trim().length > 0 && message.value.trim().length < 10
+          ? 'Zpráva musí obsahovat alespoň 10 znaků.'
+          : '',
+      );
+      consent.setCustomValidity(
+        consent.checked ? '' : 'Zaškrtněte prosím souhlas se zpracováním osobních údajů.',
+      );
+    };
+
+    message.addEventListener('input', validateContactFields);
+    consent.addEventListener('change', validateContactFields);
+    form.addEventListener('submit', (event) => {
+      validateContactFields();
+      if (!form.reportValidity()) event.preventDefault();
+    });
+  });
 
   document.querySelectorAll('[data-flash]').forEach((flash) => {
     const hide = () => {
