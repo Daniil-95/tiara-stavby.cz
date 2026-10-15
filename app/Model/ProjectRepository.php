@@ -28,15 +28,25 @@ final class ProjectRepository
 		$projects = [];
 		foreach ($this->all($lang) as $project) {
 			$project = $project->toArray();
-			$project['gallery'] = $this->database->table('project_images')
+			$gallery = [];
+			if ($project['main_image']) {
+				$gallery[] = [
+					'image_path' => $project['main_image'],
+					'title' => $project['title'],
+					'alt_text' => $project['title'] . ' — hlavní fotografie',
+					'sort_order' => 0,
+				];
+			}
+			$additionalImages = $this->database->table('project_images')
 				->where('project_id', $project['id'])
 				->where('lang', $lang)
 				->where('active', 1)
 				->order('sort_order ASC, id ASC')
 				->fetchAll();
-			if (!$project['gallery'] && $project['main_image']) {
-				$project['gallery'] = [$project];
+			foreach ($additionalImages as $image) {
+				if ($image['image_path'] !== $project['main_image']) $gallery[] = $image;
 			}
+			$project['gallery'] = $gallery;
 			$projects[] = $project;
 		}
 		return $projects;

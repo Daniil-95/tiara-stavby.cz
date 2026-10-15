@@ -88,7 +88,11 @@
     updateControls();
   });
 
-  if (window.Fancybox) window.Fancybox.bind('[data-fancybox="projects"]', {});
+  const bindFancybox = () => {
+    if (window.Fancybox) window.Fancybox.bind('[data-fancybox="projects"]', {});
+  };
+  if (window.Fancybox) bindFancybox();
+  else window.addEventListener('load', bindFancybox, { once: true });
 
   document.querySelectorAll('form').forEach((form) => {
     if (!form.classList.contains('contact-form')) return;
