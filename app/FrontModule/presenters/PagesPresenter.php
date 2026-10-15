@@ -31,22 +31,10 @@ final class PagesPresenter extends BasePresenter
 		$this->template->faqs = $this->faqs->all('cs');
 	}
 
-	public function renderProjects(?string $category = null): void
+	public function renderProjects(): void
 	{
-		$categories = ['Výstavba', 'Rekonstrukce', 'Modernizace', 'Komerční objekty'];
-		if (!in_array($category, $categories, true)) $category = null;
-		$this->template->projects = $this->projects->all('cs', $category);
-		$this->template->categories = $categories;
-		$this->template->selectedCategory = $category;
+		$this->template->projects = $this->projects->allWithGallery('cs');
 		$this->template->pageTitle = 'Vybrané realizace';
-	}
-
-	public function actionProject(int $id): void
-	{
-		$project = $this->projects->find($id, 'cs');
-		if (!$project) $this->error('Project not found.');
-		$this->template->project = $project;
-		$this->template->pageTitle = $project['title'];
 	}
 
 	public function renderThanks(): void

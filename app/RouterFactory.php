@@ -22,7 +22,6 @@ final class RouterFactory
 			$router->addRoute($path, ['module' => 'Front', 'presenter' => 'Pages', 'action' => $action]);
 		}
 		$router->addRoute('sluzby/<slug>', 'Front:Pages:service');
-		$router->addRoute('realizace/<id \\d+>', 'Front:Pages:project');
 		$router->addRoute('<path .+>', 'Front:Error:default');
 		return $router;
 	}

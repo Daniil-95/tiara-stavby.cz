@@ -19,6 +19,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
 	<link rel="stylesheet" href="/css/app.css">
 	{if $currentPath === '/'}<link rel="preload" as="image" media="(min-width: 601px)" href="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85" imagesrcset="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80 1200w, https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85 2000w">{/if}
 	<script type="application/ld+json">{$jsonLd|noescape}</script>
@@ -49,6 +50,7 @@
 		{if $company['facebook'] || $company['instagram'] || $company['linkedin']}<div class="container footer__extras"><div class="footer__social" aria-label="Sociální sítě">{if str_starts_with((string) $company['facebook'], 'https://')}<a href="{$company['facebook']}" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>{/if}{if str_starts_with((string) $company['instagram'], 'https://')}<a href="{$company['instagram']}" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>{/if}{if str_starts_with((string) $company['linkedin'], 'https://')}<a href="{$company['linkedin']}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>{/if}</div></div>{/if}
 		<div class="container footer__bottom"><span>© {date('Y')} TIARA s.r.o.</span><span>Všechna práva vyhrazena.</span>{if $company['ico'] || $company['dic']}<span class="footer__legal">{if $company['ico']}IČO: {$company['ico']}{/if}{if $company['dic']} DIČ: {$company['dic']}{/if}</span>{/if}<a href="/sitemap.xml">Sitemap</a></div>
 	</footer>
+	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" defer></script>
 	<script src="/js/site.js" defer></script>
 </body>
 </html>

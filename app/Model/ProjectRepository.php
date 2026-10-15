@@ -23,6 +23,25 @@ final class ProjectRepository
 		return $rows->fetchAll();
 	}
 
+	public function allWithGallery(string $lang): array
+	{
+		$projects = [];
+		foreach ($this->all($lang) as $project) {
+			$project = $project->toArray();
+			$project['gallery'] = $this->database->table('project_images')
+				->where('project_id', $project['id'])
+				->where('lang', $lang)
+				->where('active', 1)
+				->order('sort_order ASC, id ASC')
+				->fetchAll();
+			if (!$project['gallery'] && $project['main_image']) {
+				$project['gallery'] = [$project];
+			}
+			$projects[] = $project;
+		}
+		return $projects;
+	}
+
 	public function find(int $id, string $lang): ?array
 	{
 		$row = $this->database->table('projects')->where('id', $id)->where('lang', $lang)->where('active', 1)->fetch();

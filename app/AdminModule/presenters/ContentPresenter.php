@@ -88,6 +88,13 @@ final class ContentPresenter extends BasePresenter
 			foreach (['title', 'slug', 'location', 'icon', 'url'] as $textField) {
 				if (isset($data[$textField])) $data[$textField] = trim((string) $data[$textField]);
 			}
+			if ($this->section === 'project') {
+				$data['slug'] = Strings::webalize((string) $data['title']);
+				$data['category'] = '';
+				$data['location'] = '';
+				$data['year'] = (int) date('Y');
+				$data['description'] = $data['short_description'];
+			}
 			if (array_key_exists('slug', $data)) {
 				$data['slug'] = Strings::webalize($data['slug'] !== '' ? $data['slug'] : $data['title']);
 				if ($data['slug'] === '') {
@@ -162,16 +169,10 @@ final class ContentPresenter extends BasePresenter
 		switch ($this->section) {
 			case 'project':
 				$form->addText('title', 'Název')->setRequired('Zadejte název.')->addRule($form::MaxLength, 'Název je příliš dlouhý.', 220);
-				$form->addText('slug', 'URL slug (nepovinné, vytvoří se z názvu)')->addRule($form::MaxLength, 'URL slug je příliš dlouhý.', 220);
-				$form->addSelect('category', 'Kategorie', array_combine($c = ['Výstavba', 'Rekonstrukce', 'Modernizace', 'Komerční objekty'], $c))->setPrompt('Vyberte kategorii')->setRequired('Vyberte kategorii.');
-				$form->addText('location', 'Lokalita')->setRequired('Zadejte lokalitu.')->addRule($form::MaxLength, 'Lokalita je příliš dlouhá.', 180);
-				$form->addInteger('year', 'Rok')->setRequired('Zadejte rok.')->addRule($form::Range, 'Zadejte rok mezi 1900 a 2100.', [1900, 2100]);
-				$form->addTextArea('short_description', 'Krátký popis')->setRequired('Zadejte krátký popis.')->addRule($form::MaxLength, 'Krátký popis může mít nejvýše 500 znaků.', 500);
-				$form->addTextArea('description', 'Popis')->setRequired('Zadejte popis.');
-				$imageRule($form->addUpload('image', 'Hlavní fotografie'));
+				$form->addTextArea('short_description', 'Popis ve Fancyboxu')->setRequired('Zadejte popis, který se zobrazí po otevření fotografie.')->addRule($form::MaxLength, 'Popis může mít nejvýše 500 znaků.', 500);
+				$imageRule($form->addUpload('image', 'Fotografie do galerie'));
 				$order();
 				$form->addCheckbox('active', 'Zobrazit na webu')->setDefaultValue(true);
-				$form->addCheckbox('featured', 'Zobrazit mezi doporučenými na úvodní stránce');
 				break;
 			case 'service':
 				$form->addText('title', 'Název')->setRequired('Zadejte název.')->addRule($form::MaxLength, 'Název je příliš dlouhý.', 180);

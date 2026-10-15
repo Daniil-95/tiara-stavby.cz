@@ -88,21 +88,7 @@
     updateControls();
   });
 
-  document.querySelectorAll('[data-lightbox]').forEach((anchor) => anchor.addEventListener('click', (event) => {
-    event.preventDefault();
-    const dialog = document.createElement('dialog');
-    dialog.className = 'image-dialog';
-    const image = document.createElement('img');
-    image.src = anchor.href;
-    image.alt = anchor.querySelector('img')?.alt || '';
-    const close = document.createElement('button');
-    close.type = 'button'; close.setAttribute('aria-label', 'Close image'); close.innerHTML = '&times;';
-    close.addEventListener('click', () => dialog.close());
-    dialog.append(close, image);
-    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
-    dialog.addEventListener('close', () => dialog.remove());
-    document.body.append(dialog); dialog.showModal();
-  }));
+  if (window.Fancybox) window.Fancybox.bind('[data-fancybox="projects"]', {});
 
   document.querySelectorAll('form').forEach((form) => {
     if (!form.classList.contains('contact-form')) return;
